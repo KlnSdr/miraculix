@@ -2,6 +2,11 @@
   padding: 5px;
 }
 
+.classesContainerContainer h1 {
+  display: inline-block;
+  margin-right: 10px;
+}
+
 .classesContainer {
   display: grid;
   grid-template-columns: repeat(5, 1fr);

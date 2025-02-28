@@ -1,5 +1,5 @@
 class ClassesContainer implements Component {
-  private readonly id: string = Math.random().toString(36);
+  private readonly id: string = "ClassesContainer";
   public render(parent: edomElement) {
     edom.fromTemplate([this.instructions()], parent);
   }
@@ -11,11 +11,14 @@ class ClassesContainer implements Component {
     return {
       tag: "div",
       classes: ["classesContainerContainer"],
+      id: "ClassesContainerContainer",
       children: [
         {
           tag: "h1",
           text: "Klassen"
         },
+        // @ts-ignore
+        new Button("", _ => AddClassPopup.show(), ["fa", "fa-plus"]).instructions(),
         {
           tag: "div",
           id: this.id,

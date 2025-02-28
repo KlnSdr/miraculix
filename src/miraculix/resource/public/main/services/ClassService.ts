@@ -22,4 +22,14 @@ class ClassService {
       }
     });
   }
+
+  public static save(name: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.classes?.push({
+        id: Math.random().toString(),
+        name: name,
+      });
+      resolve();
+    });
+  }
 }

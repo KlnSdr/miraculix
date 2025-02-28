@@ -6,6 +6,7 @@ class App implements Component {
   public instructions(): edomTemplate {
     return {
       tag: "div",
+      id: "app",
       classes: ["app"],
       children: [
         // @ts-ignore
