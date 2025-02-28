@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="miraculix:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/miraculix_jar</output-path>
+    <root id="archive" name="miraculix.jar">
+      <element id="module-output" name="miraculix" />
+      <element id="extracted-dir" path="$USER_HOME$/dev/customJars/Hades/v0.7/hades.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
