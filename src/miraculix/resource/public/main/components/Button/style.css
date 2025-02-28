@@ -7,6 +7,16 @@
 }
 
 .button:hover {
-  background-color: var(--secondary-color);
-  color: var(--font-dark);
+    background-color: var(--font-dark);
+    color: var(--secondary-color);
+}
+
+.secondaryButton {
+    background-color: var(--secondary-color);
+    color: var(--font-dark);
+}
+
+.dangerButton {
+    background-color: var(--danger-color);
+    color: var(--font-light);
 }
