@@ -1,0 +1,24 @@
+.classesContainerContainer {
+  padding: 5px;
+}
+
+.classesContainer {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-auto-rows: 100px;
+  grid-column-gap: 5px;
+  grid-row-gap: 5px;
+}
+
+
+@media (max-width: 1000px) {
+    .classesContainer {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .classesContainer {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,0 +1,16 @@
+.classCard {
+  border: 2px solid var(--primary-color);
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.classCard:hover {
+  background-color: var(--primary-color);
+  cursor: pointer;
+}
+
+.classCard:hover p {
+  color: var(--font-light);
+}
