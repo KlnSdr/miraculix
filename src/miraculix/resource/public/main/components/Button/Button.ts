@@ -1,15 +1,13 @@
-class App implements Component {
+class Button implements Component {
   public render(parent: edomElement) {
     edom.fromTemplate([this.instructions()], parent);
   }
 
   public instructions(): edomTemplate {
     return {
-      tag: "div",
-      classes: ["app"],
-      children: [
-        new Button().instructions()
-      ]
+      tag: "button",
+      classes: ["button"],
+      text: "Hello World!"
     };
   }
 
