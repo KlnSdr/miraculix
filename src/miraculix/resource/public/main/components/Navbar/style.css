@@ -1,0 +1,18 @@
+.navbar {
+    background-color: var(--primary-color);
+    padding: 5px;
+    display: flex;
+}
+
+/* a little bit of ugly code/hard coding is sometimes needed */
+.verticalNavbarLine {
+    border-left: 1px solid var(--font-dark);
+    width: 0;
+    display: inline-block;
+    height: 11px;
+    margin: 0 1px;
+}
+
+.navRight {
+    margin-left: auto;
+}

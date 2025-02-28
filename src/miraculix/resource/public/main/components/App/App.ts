@@ -8,6 +8,7 @@ class App implements Component {
       tag: "div",
       classes: ["app"],
       children: [
+        new Navbar().instructions(),
         new Button("primary", () => {}).instructions(),
         new Button("secondary", () => {}, ["secondaryButton"]).instructions(),
         new Button("danger", () => {}, ["dangerButton"]).instructions()
