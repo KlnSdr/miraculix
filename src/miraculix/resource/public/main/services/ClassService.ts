@@ -1,35 +1,65 @@
 interface Class {
   id: string;
   name: string;
+  owner: string;
+  students: string[];
 }
 
 class ClassService {
-  private static classes: Class[] | null = [
-    { id: "42", name: "9b" },
-    { id: "43", name: "10b" },
-    { id: "44", name: "11b" },
-    { id: "45", name: "12b" },
-    { id: "46", name: "13b" },
-    { id: "47", name: "14b" },
-    { id: "48", name: "15b" },
-    { id: "49", name: "16b" },
-  ];
+  private static classes: Class[] | null = null;
 
   public static getClasses(): Promise<Class[]> {
     return new Promise((resolve, reject) => {
       if (this.classes !== null) {
         resolve(this.classes);
+        return;
       }
+
+      fetch("{{CONTEXT}}/rest/classes")
+        .then((response: Response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status} ${response.statusText}`);
+          }
+          return response.json();
+        })
+        .then(({ classes }: { classes: Class[] }) => {
+          this.classes = classes;
+          this.sortClasses();
+          resolve(this.classes);
+        })
+        .catch((e: any) => {
+          reject(e);
+        });
     });
   }
 
   public static save(name: string): Promise<void> {
     return new Promise((resolve, reject) => {
-      this.classes?.push({
-        id: Math.random().toString(),
-        name: name,
-      });
-      resolve();
+      fetch("{{CONTEXT}}/rest/classes", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name: name }),
+      })
+        .then((response: Response) => {
+          if (response.status !== 201) {
+            throw new Error(`HTTP ${response.status} ${response.statusText}`);
+          }
+          return response.json();
+        })
+        .then((clazz: Class) => {
+          this.classes?.push(clazz);
+          this.sortClasses();
+          resolve();
+        })
+        .catch((e: any) => {
+          reject(e);
+        });
     });
+  }
+
+  private static sortClasses() {
+    this.classes! = this.classes!.sort((a, b) => a.name.localeCompare(b.name));
   }
 }
