@@ -18,7 +18,7 @@ public class Class implements DataClass {
     @JanusString("name")
     private String name;
     @JanusList("students")
-    private List<UUID> students = new ArrayList<>();
+    private List<String> students = new ArrayList<>();
 
     public Class() {
     }
@@ -46,15 +46,15 @@ public class Class implements DataClass {
     }
 
     public List<UUID> getStudents() {
-        return students;
+        return students.stream().map(UUID::fromString).toList();
     }
 
     public void setStudents(List<UUID> students) {
-        this.students = students;
+        this.students = students.stream().map(UUID::toString).toList();
     }
 
     public void addStudent(Student student) {
-        students.add(student.getId());
+        students.add(student.getId().toString());
     }
 
     @Override
@@ -68,7 +68,7 @@ public class Class implements DataClass {
         json.setString("id", id.toString());
         json.setString("owner", owner.toString());
         json.setString("name", name);
-        json.setList("students", students.stream().map(UUID::toString).map(i -> (Object) i).toList());
+        json.setList("students", students.stream().map(i -> (Object) i).toList());
         return json;
     }
 }

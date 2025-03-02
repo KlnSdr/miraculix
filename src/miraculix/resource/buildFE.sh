@@ -29,3 +29,17 @@ perl -i -pe 'next if /href="https/; next if /href="{{/; s/href="/href="{{CONTEXT
 mkdir ../../static/classes
 cp -r docs/* ../../static/classes
 rm -rf docs
+
+echo "building /tests ======================"
+cd ../tests || exit
+ed pack
+
+perl -i -pe 'next if /src="https/; next if /src="{{/; s/src="/src="{{CONTEXT}}\/tests\//g' index.html
+perl -i -pe 'next if /src="https/; next if /src="{{/; s/src="/src="{{CONTEXT}}\/tests\//g' docs/index.html
+
+perl -i -pe 'next if /href="https/; next if /href="{{/; s/href="/href="{{CONTEXT}}\/tests\//g' index.html
+perl -i -pe 'next if /href="https/; next if /href="{{/; s/href="/href="{{CONTEXT}}\/tests\//g' docs/index.html
+
+mkdir ../../static/tests
+cp -r docs/* ../../static/tests
+rm -rf docs

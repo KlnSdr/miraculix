@@ -2,7 +2,7 @@ package miraculix.students.service;
 
 import dobby.util.json.NewJson;
 import janus.Janus;
-import miraculix.students.Class;
+import miraculix.students.Student;
 import thot.connector.Connector;
 
 import java.util.UUID;
@@ -21,11 +21,11 @@ public class StudentService {
         return instance;
     }
 
-    public boolean save(Class clazz) {
-        return Connector.write(BUCKET_NAME, clazz.getKey(), clazz.toJson());
+    public boolean save(Student student) {
+        return Connector.write(BUCKET_NAME, student.getKey(), student.toJson());
     }
 
-    public miraculix.students.Class find(String id, UUID owner) {
-        return Janus.parse(Connector.read(BUCKET_NAME, owner + "_" + id, NewJson.class), Class.class);
+    public Student find(String id, UUID owner) {
+        return Janus.parse(Connector.read(BUCKET_NAME, owner + "_" + id, NewJson.class), Student.class);
     }
 }

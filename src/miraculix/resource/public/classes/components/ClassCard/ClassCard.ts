@@ -20,6 +20,13 @@ class ClassCard implements Component {
           tag: "p",
           text: this.target.name
         }
+      ],
+      handler: [
+        {
+          id: "click",
+          type: "click",
+          body: (_self: edomElement) => ClassDetailPopup.show(this.target)
+        }
       ]
     };
   }

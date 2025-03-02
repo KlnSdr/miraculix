@@ -59,6 +59,26 @@ class ClassService {
     });
   }
 
+  public static addStudent(student: Student, clazz: Class): Promise<void> {
+    return new Promise((resolve, reject) => {
+      fetch(`{{CONTEXT}}/rest/classes/id/${clazz.id}/add-student/id/${student.id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        }
+      })
+        .then((response: Response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status} ${response.statusText}`);
+          }
+          resolve();
+        })
+        .catch((e: any) => {
+          reject(e);
+        });
+    });
+  }
+
   private static sortClasses() {
     this.classes! = this.classes!.sort((a, b) => a.name.localeCompare(b.name));
   }

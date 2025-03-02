@@ -1,0 +1,24 @@
+:root {
+    --primary-color: #0077B2;
+    --secondary-color: #A3D1DF;
+    --tertiary-color: #DFF7F9;
+    --background-color: #EFF8FF;
+    --danger-color: #c25757;
+    --font-light: #f8f9fa;
+    --font-dark: #343a40;
+}
+
+* {
+    font-family: "Computer Modern Serif", monospace;
+    font-size: large;
+    color: var(--font-dark);
+}
+
+body {
+    background-color: var(--background-color);
+    margin: 0;
+}
+
+h1 {
+  margin: 5px;
+}

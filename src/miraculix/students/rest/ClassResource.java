@@ -6,7 +6,9 @@ import dobby.io.HttpContext;
 import dobby.io.response.ResponseCodes;
 import dobby.util.json.NewJson;
 import miraculix.students.Class;
+import miraculix.students.Student;
 import miraculix.students.service.ClassService;
+import miraculix.students.service.StudentService;
 
 import java.util.Arrays;
 import java.util.UUID;
@@ -61,6 +63,42 @@ public class ClassResource {
             context.getResponse().setCode(ResponseCodes.NOT_FOUND);
             final NewJson response = new NewJson();
             response.setString("error", "Class not found");
+            context.getResponse().setBody(response);
+            return;
+        }
+
+        context.getResponse().setCode(ResponseCodes.OK);
+        context.getResponse().setBody(clazz.toJson());
+    }
+
+    @Post(BASE_PATH + "/id/{classId}/add-student/id/{studentId}")
+    public void addStudentToClass(HttpContext context) {
+        final String classId = context.getRequest().getParam("classId");
+        final String studentId = context.getRequest().getParam("studentId");
+
+        final Class clazz = classService.find(classId, getOwner(context));
+        if (clazz == null) {
+            context.getResponse().setCode(ResponseCodes.NOT_FOUND);
+            final NewJson response = new NewJson();
+            response.setString("error", "Class not found");
+            context.getResponse().setBody(response);
+            return;
+        }
+
+        final Student student = StudentService.getInstance().find(studentId, getOwner(context));
+        if (student == null) {
+            context.getResponse().setCode(ResponseCodes.NOT_FOUND);
+            final NewJson response = new NewJson();
+            response.setString("error", "Student not found");
+            context.getResponse().setBody(response);
+            return;
+        }
+
+        clazz.addStudent(student);
+        if (!classService.save(clazz)) {
+            context.getResponse().setCode(ResponseCodes.INTERNAL_SERVER_ERROR);
+            final NewJson response = new NewJson();
+            response.setString("error", "Failed to save class");
             context.getResponse().setBody(response);
             return;
         }

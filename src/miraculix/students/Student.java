@@ -18,9 +18,10 @@ public class Student implements DataClass {
     public Student() {
     }
 
-    public Student(String name) {
+    public Student(String name, UUID owner) {
         this.id = UUID.randomUUID();
         this.name = name;
+        this.owner = owner;
     }
 
     public UUID getId() {

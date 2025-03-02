@@ -1,5 +1,12 @@
-class AddClass implements Component {
+class AddStudent implements Component {
   private name: string = "";
+  // @ts-ignore
+  private readonly clazz: Class;
+
+  // @ts-ignore
+  constructor(clazz: Class) {
+    this.clazz = clazz;
+  }
 
   public render(parent: edomElement) {
     edom.fromTemplate([this.instructions()], parent);
@@ -14,7 +21,7 @@ class AddClass implements Component {
       children: [
         {
           tag: "label",
-          text: "Bezeichnung:",
+          text: "Name:",
         },
         {
           id: "inputName",
@@ -27,22 +34,24 @@ class AddClass implements Component {
         new Button("speichern", (self: edomElement) => {
           // @ts-ignore
           Popup.close(self);
-          this.createNewClass();
+          this.createNewStudent();
         }).instructions(),
       ],
     };
   }
 
-  private createNewClass() {
+  private createNewStudent() {
     // @ts-ignore
-    ClassService.save(this.name)
-      .then(() => {
-        edom.findById("ClassesContainerContainer")?.delete();
-        new ClassesContainer().render(edom.findById("app")!);
+    StudentService.create(this.name)
+      // @ts-ignore
+      .then((student: Student) => {
+        // @ts-ignore
+        return ClassService.addStudent(student, this.clazz);
       })
-      .catch((e: any) => {
-        console.error(e);
-      });
+      .then(() => {
+        console.log("updated");
+      })
+      .catch((e: any) => alert(e));
   }
 
   public unload() {}
