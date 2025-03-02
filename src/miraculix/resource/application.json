@@ -1,7 +1,7 @@
 {
   "application": {
     "name": "miraculix",
-    "version": "0.1",
+    "version": "0.0",
     "dbHost": "thot-container",
     "devMode": true
   },
@@ -19,6 +19,7 @@
     "logLevel": "DEBUG"
   },
   "hades": {
+    "disableWelcomeMessage": true,
     "apidocs": {
       "enabled": true,
       "hideHadesRoutes": true
