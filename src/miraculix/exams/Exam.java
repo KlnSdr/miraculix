@@ -82,7 +82,15 @@ public class Exam implements DataClass {
 
     @Override
     public NewJson toJson() {
-        return null;
+        final NewJson json = new NewJson();
+
+        json.setString("id", id.toString());
+        json.setString("owner", owner.toString());
+        json.setString("title", title);
+        json.setString("clazz", clazz.toString());
+        json.setList("tasks", tasks.stream().map(o -> (Object) o.toJson()).toList());
+
+        return json;
     }
 
     public NewJson toStoreJson() {

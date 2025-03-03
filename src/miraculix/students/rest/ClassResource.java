@@ -5,6 +5,7 @@ import dobby.annotations.Post;
 import dobby.io.HttpContext;
 import dobby.io.response.ResponseCodes;
 import dobby.util.json.NewJson;
+import hades.annotations.AuthorizedOnly;
 import miraculix.students.Class;
 import miraculix.students.Student;
 import miraculix.students.service.ClassService;
@@ -17,6 +18,7 @@ public class ClassResource {
     private static final String BASE_PATH = "/rest/classes";
     private static final ClassService classService = ClassService.getInstance();
 
+    @AuthorizedOnly
     @Post(BASE_PATH)
     public void createClass(HttpContext context) {
         final NewJson body = context.getRequest().getBody();
@@ -43,6 +45,7 @@ public class ClassResource {
         context.getResponse().setBody(clazz.toJson());
     }
 
+    @AuthorizedOnly
     @Get(BASE_PATH)
     public void getAllClasses(HttpContext context) {
         final Class[] classes = classService.findAll(getOwner(context));
@@ -54,6 +57,7 @@ public class ClassResource {
         context.getResponse().setBody(response);
     }
 
+    @AuthorizedOnly
     @Get(BASE_PATH + "/id/{id}")
     public void getClass(HttpContext context) {
         final String id = context.getRequest().getParam("id");
@@ -71,6 +75,7 @@ public class ClassResource {
         context.getResponse().setBody(clazz.toJson());
     }
 
+    @AuthorizedOnly
     @Post(BASE_PATH + "/id/{classId}/add-student/id/{studentId}")
     public void addStudentToClass(HttpContext context) {
         final String classId = context.getRequest().getParam("classId");

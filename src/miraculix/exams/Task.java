@@ -80,7 +80,15 @@ public class Task implements DataClass {
 
     @Override
     public NewJson toJson() {
-        return null;
+        final NewJson json = new NewJson();
+
+        json.setString("id", id.toString());
+        json.setString("title", title);
+        json.setInt("points", points);
+        json.setInt("points_comma", pointsComma);
+        json.setList("subtasks", subtasks.stream().map(o -> (Object) o.toJson()).toList());
+
+        return json;
     }
 
     public NewJson toStoreJson() {

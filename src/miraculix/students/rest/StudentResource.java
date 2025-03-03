@@ -5,6 +5,7 @@ import dobby.annotations.Post;
 import dobby.io.HttpContext;
 import dobby.io.response.ResponseCodes;
 import dobby.util.json.NewJson;
+import hades.annotations.AuthorizedOnly;
 import miraculix.students.Student;
 import miraculix.students.service.StudentService;
 
@@ -14,6 +15,7 @@ public class StudentResource {
     private static final String BASE_PATH = "/rest/students";
     private static final StudentService studentService = StudentService.getInstance();
 
+    @AuthorizedOnly
     @Post(BASE_PATH)
     public void createStudent(HttpContext context) {
         final NewJson body = context.getRequest().getBody();
@@ -40,6 +42,7 @@ public class StudentResource {
         context.getResponse().setBody(student.toJson());
     }
 
+    @AuthorizedOnly
     @Get(BASE_PATH + "/id/{id}")
     public void getStudent(HttpContext context) {
         final String id = context.getRequest().getParam("id");
