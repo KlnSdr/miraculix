@@ -1,6 +1,8 @@
 package miraculix.updates;
 
 import hades.update.Update;
+import miraculix.exams.service.ExamService;
+import miraculix.exams.service.TaskService;
 import miraculix.students.service.ClassService;
 import miraculix.students.service.StudentService;
 import thot.connector.Connector;
@@ -8,11 +10,14 @@ import thot.connector.Connector;
 public class CreateBucketsUpdate implements Update {
     @Override
     public boolean run() {
-        return
-            Connector.write(ClassService.BUCKET_NAME, "TEST", "") &&
-            Connector.delete(ClassService.BUCKET_NAME, "TEST") &&
-            Connector.write(StudentService.BUCKET_NAME, "TEST", "") &&
-            Connector.delete(StudentService.BUCKET_NAME, "TEST");
+        final String[] buckets = {ClassService.BUCKET_NAME, StudentService.BUCKET_NAME, ExamService.BUCKET_NAME, TaskService.BUCKET_NAME};
+
+        for (String bucket: buckets) {
+            if (!Connector.write(bucket, "TEST", "") || !Connector.delete(bucket, "TEST")) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
