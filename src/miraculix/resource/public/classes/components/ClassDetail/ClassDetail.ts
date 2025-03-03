@@ -37,14 +37,21 @@ class ClassDetail implements Component {
         }
 
         edom.fromTemplate(
-          // @ts-ignore
-          students.map((student: Student) => {
-            // TODO better display later
-            return {
-              tag: "p",
-              text: student.name,
-            };
-          }),
+          [
+            // @ts-ignore
+            new Button("", () => AddStudentPopup.show(this.clazz), [
+              "fa",
+              "fa-plus",
+            ]).instructions(),
+            // @ts-ignore
+            ...students.map((student: Student) => {
+              // TODO better display later
+              return {
+                tag: "p",
+                text: student.name,
+              };
+            }),
+          ],
           container
         );
       })
@@ -52,16 +59,7 @@ class ClassDetail implements Component {
         alert(e);
       });
 
-    edom.fromTemplate(
-      [
-        // @ts-ignore
-        new Button("", () => AddStudentPopup.show(this.clazz), [
-          "fa",
-          "fa-plus",
-        ]).instructions(),
-      ],
-      container
-    );
+    edom.fromTemplate([], container);
   }
 
   public unload() {}

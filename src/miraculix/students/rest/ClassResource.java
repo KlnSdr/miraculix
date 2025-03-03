@@ -2,6 +2,7 @@ package miraculix.students.rest;
 
 import dobby.annotations.Get;
 import dobby.annotations.Post;
+import dobby.annotations.Put;
 import dobby.io.HttpContext;
 import dobby.io.response.ResponseCodes;
 import dobby.util.json.NewJson;
@@ -76,7 +77,7 @@ public class ClassResource {
     }
 
     @AuthorizedOnly
-    @Post(BASE_PATH + "/id/{classId}/add-student/id/{studentId}")
+    @Put(BASE_PATH + "/id/{classId}/add-student/id/{studentId}")
     public void addStudentToClass(HttpContext context) {
         final String classId = context.getRequest().getParam("classId");
         final String studentId = context.getRequest().getParam("studentId");

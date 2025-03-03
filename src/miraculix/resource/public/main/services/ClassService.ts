@@ -62,7 +62,7 @@ class ClassService {
   public static addStudent(student: Student, clazz: Class): Promise<void> {
     return new Promise((resolve, reject) => {
       fetch(`{{CONTEXT}}/rest/classes/id/${clazz.id}/add-student/id/${student.id}`, {
-        method: "POST",
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
         }
