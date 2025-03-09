@@ -23,7 +23,9 @@ class TestsService {
           }
           return response.json();
         })
-        .then(({ exams }: { exams: Test[] }) => resolve(exams))
+        .then(({ exams }: { exams: Test[] }) =>
+          resolve(exams.sort((a, b) => a.title.localeCompare(b.title)))
+        )
         .catch((e: any) => reject(e));
     });
   }
@@ -33,15 +35,15 @@ class TestsService {
       fetch("{{CONTEXT}}/rest/exams", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           title: title,
-          class: clazz
-        })
+          class: clazz,
+        }),
       })
-      .then(_ => resolve())
-      .catch((e: any) => reject(e));
+        .then((_) => resolve())
+        .catch((e: any) => reject(e));
     });
   }
 }
