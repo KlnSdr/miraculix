@@ -61,12 +61,15 @@ class ClassService {
 
   public static addStudent(student: Student, clazz: Class): Promise<void> {
     return new Promise((resolve, reject) => {
-      fetch(`{{CONTEXT}}/rest/classes/id/${clazz.id}/add-student/id/${student.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
+      fetch(
+        `{{CONTEXT}}/rest/classes/id/${clazz.id}/add-student/id/${student.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
         }
-      })
+      )
         .then((response: Response) => {
           if (!response.ok) {
             throw new Error(`HTTP ${response.status} ${response.statusText}`);
@@ -80,6 +83,17 @@ class ClassService {
   }
 
   private static sortClasses() {
-    this.classes! = this.classes!.sort((a, b) => a.name.localeCompare(b.name));
+    this.classes! = this.classes!.sort((a, b) => {
+      const numA = parseInt(a.name.replace(/[^0-9]/g, ""));
+      const numB = parseInt(b.name.replace(/[^0-9]/g, ""));
+      if (numA < numB) {
+        return -1;
+      } else if (numA === numB) {
+        return a.name
+          .replace(/[0-9]/g, "")
+          .localeCompare(b.name.replace(/[0-9]/g, ""));
+      }
+      return 1;
+    });
   }
 }
