@@ -4,6 +4,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
 }
 
 .testCard:hover {
@@ -13,4 +14,21 @@
 
 .testCard:hover p {
   color: var(--font-light);
+}
+
+.testCardBadge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 5px;
+  background-color: var(--secondary-color);
+  clip-path: circle(50%);
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  line-height: 30px;
+}
+
+.testCard:hover .testCardBadge {
+  color: var(--font-dark);
 }

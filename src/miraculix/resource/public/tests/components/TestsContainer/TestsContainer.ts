@@ -15,30 +15,44 @@ class TestsContainer implements Component {
       children: [
         {
           tag: "h1",
-          text: "Tests"
+          text: "Tests",
         },
         // @ts-ignore
-        new Button("", _ => AddTestPopup.show(), ["fa", "fa-plus"]).instructions(),
+        new Button("", (_) => AddTestPopup.show(), [
+          "fa",
+          "fa-plus",
+        ]).instructions(),
         {
           tag: "div",
           id: this.id,
-          classes: ["testsContainer"]
-        }
-      ]
+          classes: ["testsContainer"],
+        },
+      ],
     };
   }
 
   private loadTests() {
-    // @ts-ignore
-    TestsService.getAll()
+    Promise.all([
       // @ts-ignore
-      .then((ts: Test[]) => {
-      const container: edomElement = edom.findById(this.id)!;
+      TestsService.getAll(),
+      // @ts-ignore
+      ClassService.getClasses(),
+    ])
+      // @ts-ignore
+      .then(([ts, cs]: [Test[], Class[]]) => {
+        const container: edomElement = edom.findById(this.id)!;
 
-      edom.fromTemplate(
-        // @ts-ignore
-        ts.map((t: Test) => new TestCard(t).instructions())
-      , container);
+        edom.fromTemplate(
+          // @ts-ignore
+          cs.map((c: Class) =>
+          ts
+              // @ts-ignore
+              .filter((t: Test) => t.clazz == c.id)
+              // @ts-ignore
+              .map((t: Test) => new TestCard(t, c).instructions())
+          ).flat(),
+          container
+        );
       })
       .catch((e: any) => {
         alert(e);

@@ -1,10 +1,13 @@
 class TestCard implements Component {
   // @ts-ignore
   private target: Test;
+  // @ts-ignore
+  private clazz: Class;
 
   // @ts-ignore
-  constructor(c: Test) {
-    this.target = c;
+  constructor(t: Test, c: Class) {
+    this.target = t;
+    this.clazz = c;
   }
 
   public render(parent: edomElement) {
@@ -18,8 +21,13 @@ class TestCard implements Component {
       children: [
         {
           tag: "p",
-          text: this.target.title
-        }
+          text: this.clazz.name,
+          classes: ["testCardBadge"]
+        },
+        {
+          tag: "p",
+          text: this.target.title,
+        },
       ],
       // handler: [
       //   {
