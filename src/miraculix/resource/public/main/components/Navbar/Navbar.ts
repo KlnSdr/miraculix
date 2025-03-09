@@ -11,16 +11,12 @@ interface DynamicLink {
 class Navbar implements Component {
   private static navbarElements: NavbarElement[] = [
     {
-      text: "Home",
-      destination: "{{CONTEXT}}/",
+      text: "Tests",
+      destination: "{{CONTEXT}}/tests",
     },
     {
       text: "Klassen",
       destination: "{{CONTEXT}}/classes",
-    },
-    {
-      text: "Tests",
-      destination: "{{CONTEXT}}/tests",
     },
   ];
   private dynamicLinks: DynamicLink[];
@@ -45,7 +41,7 @@ class Navbar implements Component {
             ...(this.dynamicLinks.length > 0
               ? [
                   ...this.dynamicLinks.map((link: DynamicLink) =>
-                    new Button(link.text, link.action).instructions(),
+                    new Button(link.text, link.action).instructions()
                   ),
                   {
                     tag: "div",
@@ -54,10 +50,7 @@ class Navbar implements Component {
                 ]
               : []),
             ...Navbar.navbarElements.map((element: NavbarElement) =>
-              new NavbarButton(
-                element.text,
-                element.destination,
-              ).instructions(),
+              new NavbarButton(element.text, element.destination).instructions()
             ),
           ],
         },
@@ -65,9 +58,12 @@ class Navbar implements Component {
           tag: "div",
           classes: ["navRight"],
           children: [
-            new NavbarButton("", "{{CONTEXT}}/settings", ["fa", "fa-cog"]).instructions(),
-            new NavbarButton("", "{{CONTEXT}}/info", ["fa", "fa-info-circle"]).instructions(),
-            new NavbarButton("", "{{CONTEXT}}/logout", ["fa", "fa-sign-out"]).instructions(),
+            // new NavbarButton("", "{{CONTEXT}}/settings", ["fa", "fa-cog"]).instructions(),
+            // new NavbarButton("", "{{CONTEXT}}/info", ["fa", "fa-info-circle"]).instructions(),
+            new NavbarButton("", "{{CONTEXT}}/logout", [
+              "fa",
+              "fa-sign-out",
+            ]).instructions(),
           ],
         },
       ],
