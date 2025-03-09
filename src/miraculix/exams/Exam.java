@@ -66,8 +66,9 @@ public class Exam implements DataClass {
     }
 
     public void addTask(Task task) {
+        tasks = new ArrayList<>(tasks);
         tasks.add(task);
-        taskIds.add(task.getId().toString());
+        taskIds = tasks.stream().map(Task::getId).map(UUID::toString).toList();
     }
 
     public void setTasks(List<Task> tasks) {

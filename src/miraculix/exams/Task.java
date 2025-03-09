@@ -25,6 +25,7 @@ public class Task implements DataClass {
     private List<Task> subtasks = new ArrayList<>();
 
     public Task() {
+        this.id = UUID.randomUUID();
     }
 
     public Task(String title, float points) {
@@ -84,8 +85,7 @@ public class Task implements DataClass {
 
         json.setString("id", id.toString());
         json.setString("title", title);
-        json.setInt("points", points);
-        json.setInt("points_comma", pointsComma);
+        json.setFloat("points", getPoints());
         json.setList("subtasks", subtasks.stream().map(o -> (Object) o.toJson()).toList());
 
         return json;
