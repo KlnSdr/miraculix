@@ -1,0 +1,16 @@
+.testCard {
+  border: 2px solid var(--primary-color);
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.testCard:hover {
+  background-color: var(--primary-color);
+  cursor: pointer;
+}
+
+.testCard:hover p {
+  color: var(--font-light);
+}

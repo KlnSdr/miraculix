@@ -42,4 +42,17 @@ public class ExamService {
 
         return exam;
     }
+
+    public Exam[] getAll(UUID owner) {
+        final NewJson[] jsons = Connector.readPattern(BUCKET_NAME, owner + "_.*", NewJson.class);
+        final Exam[] exams = new Exam[jsons.length];
+
+        for (int i = 0; i < jsons.length; i++) {
+            final Exam exam = Janus.parse(jsons[i], Exam.class);
+            exam.setTasks(TaskService.getInstance().get(exam.getTaskIds()));
+            exams[i] = exam;
+        }
+
+        return exams;
+    }
 }

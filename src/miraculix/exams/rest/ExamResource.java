@@ -15,6 +15,7 @@ import miraculix.students.service.ClassService;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 public class ExamResource {
     private static final String BASE_PATH = "/rest/exams";
@@ -75,6 +76,18 @@ public class ExamResource {
 
         context.getResponse().setCode(ResponseCodes.OK);
         context.getResponse().setBody(exam.toJson());
+    }
+
+    @AuthorizedOnly
+    @Get(BASE_PATH)
+    public void getExams(HttpContext context) {
+        final Exam[] exams = service.getAll(getOwner(context));
+
+        final NewJson response = new NewJson();
+        response.setList("exams", Stream.of(exams).map(Exam::toJson).map(o -> (Object) o).toList());
+
+        context.getResponse().setCode(ResponseCodes.OK);
+        context.getResponse().setBody(response);
     }
 
     @AuthorizedOnly

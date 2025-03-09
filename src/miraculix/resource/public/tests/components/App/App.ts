@@ -11,7 +11,8 @@ class App implements Component {
       children: [
         // @ts-ignore
         new Navbar().instructions(),
-      ]
+        new TestsContainer().instructions(),
+      ],
     };
   }
 
