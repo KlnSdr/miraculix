@@ -65,6 +65,9 @@ class AddTest implements Component {
                 this.name = val;
               }, "").instructions(),
             },
+            {
+              tag: "label"
+            },
             // @ts-ignore
             new Button("speichern", (self: edomElement) => {
               // @ts-ignore

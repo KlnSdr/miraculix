@@ -1,6 +1,6 @@
-class AddTestPopup implements Component {
+class AddTaskPopup implements Component {
   public static show() {
-    new AddTestPopup().render(edom.body);
+    new AddTaskPopup().render(edom.body);
   }
   public render(parent: edomElement) {
     edom.fromTemplate([this.instructions()], parent);
@@ -8,7 +8,10 @@ class AddTestPopup implements Component {
 
   public instructions(): edomTemplate {
     // @ts-ignore
-    return new Popup("Neuer Test", new AddTest().instructions()).instructions();
+    return new Popup(
+      "Neue Aufgabe",
+      new AddTask().instructions()
+    ).instructions();
   }
 
   public unload() {}

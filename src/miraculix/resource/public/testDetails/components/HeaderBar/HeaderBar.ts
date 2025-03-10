@@ -32,6 +32,11 @@ class HeaderBar implements Component {
           tag: "h1",
           text: this.examTitle,
         },
+        // @ts-ignore
+        new Button("", (_) => AddTaskPopup.show(), [
+          "fa",
+          "fa-plus",
+        ]).instructions(),
       ],
     };
   }
