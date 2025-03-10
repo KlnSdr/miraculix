@@ -46,4 +46,24 @@ class TestsService {
         .catch((e: any) => reject(e));
     });
   }
+
+  public static addTask(examId: string, task: Task): Promise<Test> {
+    return new Promise((resolve, reject) => {
+      fetch(`{{CONTEXT}}/rest/exams/id/${examId}/tasks`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(task),
+      })
+        .then((response: Response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status} ${response.statusText}`);
+          }
+          return response.json();
+        })
+        .then((test: Test) => resolve(test))
+        .catch((e: any) => reject(e));
+    });
+  }
 }

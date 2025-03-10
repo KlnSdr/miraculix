@@ -6,6 +6,11 @@ class AddTask implements Component {
     subtasks: [],
   };
   private subtaskCounter: number = 0;
+  private readonly examId: string;
+
+  constructor(examId: string) {
+    this.examId = examId;
+  }
 
   public render(parent: edomElement) {
     edom.fromTemplate([this.instructions()], parent);
@@ -72,14 +77,31 @@ class AddTask implements Component {
             },
             // @ts-ignore
             new Button("speichern", (self: edomElement) => {
-              console.log(this.data);
               // @ts-ignore
-              // Popup.close(self);
+              Popup.close(self);
+              this.saveTask();
             }).instructions(),
           ],
         },
       ],
     };
+  }
+
+  private saveTask() {
+    // @ts-ignore
+    this.data.subtasks = this.data.subtasks.map((t: Task) => {
+      return {
+        ...t,
+        title: `${this.data.title} ${t.title}`,
+      };
+    });
+    // @ts-ignore
+    TestsService.addTask(this.examId, this.data)
+      // @ts-ignore
+      .then((test: Test) => {
+        console.log(test);
+      })
+      .catch((e: any) => alert(e));
   }
 
   private renderTopLevelTask(): edomTemplate[] {
@@ -94,7 +116,7 @@ class AddTask implements Component {
         ...new Input((val: string) => {
           this.data = {
             ...this.data,
-            points: parseFloat(val),
+            points: parseFloat(val.replace(",", ".")),
           };
         }, "").instructions(),
       },
@@ -123,7 +145,9 @@ class AddTask implements Component {
               },
               // @ts-ignore
               new Input((val: string) => {
-                this.data.subtasks[index].points = parseFloat(val);
+                this.data.subtasks[index].points = parseFloat(
+                  val.replace(",", ".")
+                );
               }, "").instructions(),
             ],
             conainer

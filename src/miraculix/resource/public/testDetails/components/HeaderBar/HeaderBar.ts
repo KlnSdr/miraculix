@@ -1,8 +1,10 @@
 class HeaderBar implements Component {
   private readonly examTitle: string;
+  private readonly examId: string;
 
-  constructor(examTitle: string) {
+  constructor(examTitle: string, examId: string) {
     this.examTitle = examTitle;
+    this.examId = examId;
   }
 
   public render(parent: edomElement) {
@@ -33,7 +35,7 @@ class HeaderBar implements Component {
           text: this.examTitle,
         },
         // @ts-ignore
-        new Button("", (_) => AddTaskPopup.show(), [
+        new Button("", (_) => AddTaskPopup.show(this.examId), [
           "fa",
           "fa-plus",
         ]).instructions(),

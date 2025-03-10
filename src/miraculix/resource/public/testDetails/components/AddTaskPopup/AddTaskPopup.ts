@@ -1,6 +1,12 @@
 class AddTaskPopup implements Component {
-  public static show() {
-    new AddTaskPopup().render(edom.body);
+  private readonly examId: string;
+
+  constructor(examId: string) {
+    this.examId = examId;
+  }
+
+  public static show(examId: string) {
+    new AddTaskPopup(examId).render(edom.body);
   }
   public render(parent: edomElement) {
     edom.fromTemplate([this.instructions()], parent);
@@ -10,7 +16,7 @@ class AddTaskPopup implements Component {
     // @ts-ignore
     return new Popup(
       "Neue Aufgabe",
-      new AddTask().instructions()
+      new AddTask(this.examId).instructions()
     ).instructions();
   }
 
