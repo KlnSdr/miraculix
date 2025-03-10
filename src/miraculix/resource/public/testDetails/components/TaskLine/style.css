@@ -2,3 +2,7 @@
   display: inline-block;
   margin-right: 5px;
 }
+
+.taskLine .taskLine {
+  margin-left: 25px;
+}

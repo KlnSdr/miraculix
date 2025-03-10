@@ -21,8 +21,21 @@ class TaskLine implements Component {
           text: this.task.title,
         },
         new OpenTaskButton(this.task).instructions(),
-        // @ts-ignore
-        ...this.task.subtasks.map((t: Task) => new TaskLine(t).instructions()),
+        ...this.task.subtasks
+          // @ts-ignore
+          .sort((a: Task, b: Task) => {
+            const numA: number = parseInt(a.title.replace(/[^0-9]/g, ""));
+            const numB: number = parseInt(b.title.replace(/[^0-9]/g, ""));
+
+            if (numA < numB) {
+              return -1;
+            } else if (numA == numB) {
+              return a.title.localeCompare(b.title);
+            }
+            return 1;
+          })
+          // @ts-ignore
+          .map((task: Task) => new TaskLine(task).instructions()),
       ],
     };
   }
