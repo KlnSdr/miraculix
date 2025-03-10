@@ -27,6 +27,7 @@ class TestDetailContainer implements Component {
     return {
       tag: "div",
       classes: ["testDetailContainer"],
+      id: "TestDetailContainer",
       children: [
         new HeaderBar(this.examData.title, this.examData.id).instructions(),
         {

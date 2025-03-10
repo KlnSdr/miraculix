@@ -99,7 +99,8 @@ class AddTask implements Component {
     TestsService.addTask(this.examId, this.data)
       // @ts-ignore
       .then((test: Test) => {
-        console.log(test);
+        edom.findById("TestDetailContainer")!.delete();
+        new TestDetailContainer(test).render(edom.findById("app")!);
       })
       .catch((e: any) => alert(e));
   }
