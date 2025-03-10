@@ -1,0 +1,7 @@
+.testDetailContainer {
+  margin: 5px;
+}
+
+.testDetailContainer h1 {
+  display: inline-block;
+}

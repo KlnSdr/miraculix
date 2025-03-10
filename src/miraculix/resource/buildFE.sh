@@ -43,3 +43,17 @@ perl -i -pe 'next if /href="https/; next if /href="{{/; s/href="/href="{{CONTEXT
 mkdir ../../static/tests
 cp -r docs/* ../../static/tests
 rm -rf docs
+
+echo "building /tests/id/{id} ======================"
+cd ../testDetails || exit
+ed pack
+
+perl -i -pe 'next if /src="https/; next if /src="{{/; s/src="/src="{{CONTEXT}}\/testDetails\//g' index.html
+perl -i -pe 'next if /src="https/; next if /src="{{/; s/src="/src="{{CONTEXT}}\/testDetails\//g' docs/index.html
+
+perl -i -pe 'next if /href="https/; next if /href="{{/; s/href="/href="{{CONTEXT}}\/testDetails\//g' index.html
+perl -i -pe 'next if /href="https/; next if /href="{{/; s/href="/href="{{CONTEXT}}\/testDetails\//g' docs/index.html
+
+mkdir ../../static/testDetails
+cp -r docs/* ../../static/testDetails
+rm -rf docs

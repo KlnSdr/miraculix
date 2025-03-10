@@ -22,20 +22,21 @@ class TestCard implements Component {
         {
           tag: "p",
           text: this.clazz.name,
-          classes: ["testCardBadge"]
+          classes: ["testCardBadge"],
         },
         {
           tag: "p",
           text: this.target.title,
         },
       ],
-      // handler: [
-      //   {
-      //     id: "click",
-      //     type: "click",
-      //     body: (_self: edomElement) => TestDetailPopup.show(this.target)
-      //   }
-      // ]
+      handler: [
+        {
+          id: "click",
+          type: "click",
+          body: (_self: edomElement) =>
+            location.assign(`{{CONTEXT}}/tests/id/${this.target.id}`),
+        },
+      ],
     };
   }
 
