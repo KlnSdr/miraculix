@@ -1,4 +1,4 @@
-class OpenTaskButton implements Component {
+class OpenTaskStatsButton implements Component {
   // @ts-ignore
   private readonly task: Task;
 
@@ -12,14 +12,10 @@ class OpenTaskButton implements Component {
   }
 
   public instructions(): edomTemplate {
-    // @ts-ignore
-    return new Button(
-      "",
-      () => {
-        TaskDetailPopup.show(this.task);
-      },
-      ["fa", "fa-external-link"]
-    ).instructions();
+  // @ts-ignore
+    return new Button("", () => {
+      console.log("click");
+    }, ["fa", "fa-pie-chart", "statsButton"]).instructions();
   }
 
   public unload() {}

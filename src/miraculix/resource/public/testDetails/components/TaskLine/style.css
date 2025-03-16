@@ -1,6 +1,6 @@
 .taskLine p {
   display: inline-block;
-  margin-right: 5px;
+  margin: 5px;
 }
 
 .taskLine .taskLine {

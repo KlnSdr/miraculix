@@ -1,0 +1,60 @@
+.taskDetail {
+  width: 50vw;
+  height: 50vh;
+  overflow: scroll;
+}
+
+.studentTable {
+  border-collapse: collapse;
+  max-width: 100vw;
+  overflow-x: auto;
+  width: 100%;
+  margin-top: 5px;
+}
+
+.studentTable tr td,
+.studentTable tr th {
+  border-left: 1px solid var(--font-dark);
+  border-right: 1px solid var(--font-dark);
+  padding-left: 2px;
+  padding-right: 2px;
+}
+
+.studentTable tr th:first-child {
+  border-top-left-radius: 5px;
+}
+
+.studentTable tr th:last-child {
+  border-top-right-radius: 5px;
+}
+
+.studentTable tr:last-child td:first-child {
+  border-bottom-left-radius: 5px;
+}
+
+.studentTable tr:last-child td:last-child {
+  border-bottom-right-radius: 5px;
+}
+
+.studentTable tr td:first-child,
+.studentTable tr th:first-child {
+  border-left: none;
+}
+
+.studentTable tr td:last-child,
+.studentTable tr th:last-child {
+  border-right: none;
+}
+
+.studentTable thead th {
+  background-color: var(--primary-color);
+}
+
+.studentTable tbody tr:nth-child(even) {
+  background-color: var(--primary-color);
+}
+
+.studentTable tr:hover {
+  font-weight: bold;
+  background-color: var(--font-light) !important;
+}

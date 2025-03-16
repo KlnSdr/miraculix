@@ -21,6 +21,7 @@ class TaskLine implements Component {
           text: this.task.title,
         },
         new OpenTaskButton(this.task).instructions(),
+        new OpenTaskStatsButton(this.task).instructions(),
         ...this.task.subtasks
           // @ts-ignore
           .sort((a: Task, b: Task) => {
