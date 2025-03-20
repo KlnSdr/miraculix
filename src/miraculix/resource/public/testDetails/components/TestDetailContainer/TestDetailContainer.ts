@@ -49,7 +49,7 @@ class TestDetailContainer implements Component {
             return 1;
           })
           // @ts-ignore
-          .map((task: Task) => new TaskLine(task).instructions()),
+          .map((task: Task) => new TaskLine(this.examData.clazz, task).instructions()),
       ],
     };
   }

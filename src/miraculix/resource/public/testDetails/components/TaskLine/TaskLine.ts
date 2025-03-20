@@ -1,10 +1,12 @@
 class TaskLine implements Component {
   // @ts-ignore
   private readonly task: Task;
+  private classId: string;
 
   // @ts-ignore
-  constructor(task: Task) {
+  constructor(classId: string, task: Task) {
     this.task = task;
+    this.classId = classId;
   }
 
   public render(parent: edomElement) {
@@ -20,7 +22,7 @@ class TaskLine implements Component {
           tag: "p",
           text: this.task.title,
         },
-        new OpenTaskButton(this.task).instructions(),
+        new OpenTaskButton(this.classId, this.task).instructions(),
         new OpenTaskStatsButton(this.task).instructions(),
         ...this.task.subtasks
           // @ts-ignore
@@ -36,7 +38,7 @@ class TaskLine implements Component {
             return 1;
           })
           // @ts-ignore
-          .map((task: Task) => new TaskLine(task).instructions()),
+          .map((task: Task) => new TaskLine(this.classId, task).instructions()),
       ],
     };
   }

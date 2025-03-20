@@ -33,6 +33,24 @@ class ClassService {
     });
   }
 
+  public static getClassById(id: string): Promise<Class> {
+    return new Promise((resolve, reject) => {
+      this.getClasses()
+        .then((classes: Class[]) => {
+          const clazz: Class | undefined = classes.find(
+            (c: Class) => c.id === id
+          );
+
+          if (clazz === undefined) {
+            reject(`No class with id ${id} found.`);
+            return;
+          }
+          resolve(clazz);
+        })
+        .catch(reject);
+    });
+  }
+
   public static save(name: string): Promise<void> {
     return new Promise((resolve, reject) => {
       fetch("{{CONTEXT}}/rest/classes", {

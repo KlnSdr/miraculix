@@ -55,6 +55,5 @@
 }
 
 .studentTable tr:hover {
-  font-weight: bold;
   background-color: var(--font-light) !important;
 }

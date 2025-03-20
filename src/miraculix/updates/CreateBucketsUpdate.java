@@ -10,7 +10,7 @@ import thot.connector.Connector;
 public class CreateBucketsUpdate implements Update {
     @Override
     public boolean run() {
-        final String[] buckets = {ClassService.BUCKET_NAME, StudentService.BUCKET_NAME, ExamService.BUCKET_NAME, TaskService.BUCKET_NAME};
+        final String[] buckets = {ClassService.BUCKET_NAME, StudentService.BUCKET_NAME, ExamService.BUCKET_NAME, TaskService.BUCKET_NAME, TaskService.STUDENT_POINTS_BUCKET_NAME};
 
         for (String bucket: buckets) {
             if (!Connector.write(bucket, "TEST", "") || !Connector.delete(bucket, "TEST")) {

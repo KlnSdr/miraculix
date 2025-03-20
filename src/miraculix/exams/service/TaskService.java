@@ -3,13 +3,14 @@ package miraculix.exams.service;
 import dobby.util.json.NewJson;
 import janus.Janus;
 import miraculix.exams.Task;
+import miraculix.exams.TaskStudentPoints;
 import thot.connector.Connector;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class TaskService {
     public static final String BUCKET_NAME = "miraculix_tasks";
+    public static final String STUDENT_POINTS_BUCKET_NAME = "miraculix_student_points";
     private static TaskService instance;
 
     private TaskService() {
@@ -50,6 +51,29 @@ public class TaskService {
             }
         }
 
+        return result;
+    }
+
+    public boolean saveStudentPoints(UUID owner, UUID studentId, UUID taskId, double points) {
+        final TaskStudentPoints data = new TaskStudentPoints(owner, taskId, studentId, points);
+        return Connector.write(STUDENT_POINTS_BUCKET_NAME, data.getKey(), data.toStoreJson());
+    }
+
+    public TaskStudentPoints getStudentPoints(UUID owner, UUID taskId, UUID studentId) {
+        final NewJson json = Connector.read(STUDENT_POINTS_BUCKET_NAME, owner + "_" + taskId + "_" + studentId, NewJson.class);
+        return Janus.parse(json, TaskStudentPoints.class);
+    }
+
+    public Map<UUID, TaskStudentPoints> getPointsForTask(UUID owner, UUID taskId) {
+        final NewJson[] jsons = Connector.readPattern(STUDENT_POINTS_BUCKET_NAME, owner + "_" + taskId + "_.*", NewJson.class);
+        final Map<UUID, TaskStudentPoints> result = new HashMap<>();
+
+        for (NewJson json : jsons) {
+            final TaskStudentPoints points = Janus.parse(json, TaskStudentPoints.class);
+            if (points != null) {
+                result.put(points.getStudentId(), points);
+            }
+        }
         return result;
     }
 }

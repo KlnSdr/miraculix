@@ -1,10 +1,12 @@
 class OpenTaskButton implements Component {
   // @ts-ignore
   private readonly task: Task;
+  private readonly classId: string;
 
   // @ts-ignore
-  constructor(task: Task) {
+  constructor(classId: string, task: Task) {
     this.task = task;
+    this.classId = classId;
   }
 
   public render(parent: edomElement) {
@@ -16,7 +18,7 @@ class OpenTaskButton implements Component {
     return new Button(
       "",
       () => {
-        TaskDetailPopup.show(this.task);
+        TaskDetailPopup.show(this.classId, this.task);
       },
       ["fa", "fa-external-link"]
     ).instructions();
