@@ -62,6 +62,16 @@ class TaskDetail implements Component {
         ]);
       })
       .then((res: Array<number | null>[]) => {
+        if (res.length > 1) {
+          for (let i = 0; i < res[0].length; i++) {
+            let sum: number = 0.0;
+
+            for (let j = 0; j < res.length - 1; j++) {
+              sum += res[j][i] ?? 0.0;
+            }
+            res[res.length - 1][i] = sum;
+          }
+        }
         this.renderWithData(res);
       })
       .catch((e: any) => {
