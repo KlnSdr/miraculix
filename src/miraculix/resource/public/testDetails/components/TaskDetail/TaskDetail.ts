@@ -41,15 +41,27 @@ class TaskDetail implements Component {
       // @ts-ignore
       .then((students: Student[]) => {
         this.students = students;
-        return Promise.all(
+        return Promise.all([
           // @ts-ignore
-          students.map((s: Student) =>
+          ...this.task.subtasks.map((t: Task) => {
+            return Promise.all(
+              // @ts-ignore
+              students.map((s: Student) =>
+                // @ts-ignore
+                TaskService.getPoints(t.id, s.id)
+              )
+            );
+          }),
+          Promise.all(
             // @ts-ignore
-            TaskService.getPoints(this.task.id, s.id)
-          )
-        );
+            students.map((s: Student) =>
+              // @ts-ignore
+              TaskService.getPoints(this.task.id, s.id)
+            )
+          ),
+        ]);
       })
-      .then((res: Array<number | null>) => {
+      .then((res: Array<number | null>[]) => {
         this.renderWithData(res);
       })
       .catch((e: any) => {
@@ -57,7 +69,7 @@ class TaskDetail implements Component {
       });
   }
 
-  private renderWithData(points: Array<number | null>) {
+  private renderWithData(points: Array<number | null>[]) {
     const container: edomElement = edom.findById("TaskDetail")!;
 
     while (container.children.length > 0) {
@@ -89,7 +101,7 @@ class TaskDetail implements Component {
               children: this.students
                 // @ts-ignore
                 .map((s: Student, index: number) =>
-                  this.studentLine(s, points[index])
+                  this.studentLine(s, points, index)
                 )
                 .filter((e) => e != null),
             },
@@ -128,7 +140,8 @@ class TaskDetail implements Component {
   private studentLine(
     // @ts-ignore
     student: Student,
-    points: number | null
+    points: Array<number | null>[],
+    index: number
   ): edomTemplate | null {
     if (points === null) {
       return null;
@@ -141,10 +154,12 @@ class TaskDetail implements Component {
           tag: "td",
           text: student.name,
         },
-        {
-          tag: "td",
-          text: points,
-        },
+        ...points.map((pts: (number | null)[]) => {
+          return {
+            tag: "td",
+            text: pts[index]?.toFixed(1) ?? "",
+          };
+        }),
       ],
     };
   }
