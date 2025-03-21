@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>redirecting...</title>
+  </head>
+  <script>
+    function doLogout() {
+      fetch("{{CONTEXT}}/rest/users/logout", {
+        method: "GET",
+      }).then((response) => {
+        if (response.status === 200) {
+          location.assign("{{CONTEXT}}/");
+        } else {
+          alert("Logout failed");
+        }
+      });
+    }
+  </script>
+  <body onload="doLogout()">
+    <p>Sie werden weitergeleitet...</p>
+  </body>
+</html>

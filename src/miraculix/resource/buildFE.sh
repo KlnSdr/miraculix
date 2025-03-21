@@ -57,3 +57,10 @@ perl -i -pe 'next if /href="https/; next if /href="{{/; s/href="/href="{{CONTEXT
 mkdir ../../static/testDetails
 cp -r docs/* ../../static/testDetails
 rm -rf docs
+
+echo "building /logout ======================"
+cd ../logout || exit
+
+mkdir ../../static/logout
+cp -r index.html ../../static/logout
+echo "done!"
