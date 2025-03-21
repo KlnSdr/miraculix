@@ -20,6 +20,7 @@ class AddStudentTaskPoints implements Component {
     return {
       tag: "div",
       classes: ["addStudentTaskPoints"],
+      id: "AddStudentTaskPointsPopup",
       children: [
         {
           tag: "label",
@@ -46,14 +47,14 @@ class AddStudentTaskPoints implements Component {
           tag: "label",
         },
         // @ts-ignore
-        new Button("speichern", (self: edomElement) =>
-          this.savePoints(self)
+        new Button("speichern", (_self: edomElement) =>
+          this.savePoints()
         ).instructions(),
       ],
     };
   }
 
-  private savePoints(sender: edomElement) {
+  private savePoints() {
     // @ts-ignore
     const selectedStudent: Student | undefined = this.students.find(
       // @ts-ignore
@@ -69,10 +70,21 @@ class AddStudentTaskPoints implements Component {
     // @ts-ignore
     TaskService.addNewPoints(this.taskId, studentId, this.points)
       .then(() => {
-        // @ts-ignore
-        Popup.close(sender);
+        this.resetPopup();
       })
       .catch((e: any) => alert(e));
+  }
+
+  private resetPopup() {
+    const container: edomElement = edom.findById("AddStudentTaskPointsPopup")!
+      .parent!;
+
+    edom.findById("AddStudentTaskPointsPopup")!.delete();
+
+    this.points = 0.0;
+    this.student = "";
+
+    edom.fromTemplate([this.instructions()], container);
   }
 
   public unload() {}
