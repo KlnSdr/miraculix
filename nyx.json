@@ -1,0 +1,22 @@
+{
+  "remoteRepoUrl": "https://repo.klnsdr.com",
+  "project": {
+    "entry": "miraculix.MiraculixApplication",
+    "name": "miraculix",
+    "version": "0.0",
+    "group": "dobby",
+    "dependencies": [
+      {
+        "group": "dobby",
+        "name": "hades",
+        "version": "0.7"
+      }
+    ]
+  },
+  "compiler": {
+    "version": "21"
+  },
+  "exclude": [
+    "public"
+  ]
+}
