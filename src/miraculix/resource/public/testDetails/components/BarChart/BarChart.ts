@@ -24,8 +24,8 @@ class BarChart implements Component {
             {
               fill: false,
               lineTension: 0,
-              backgroundColor: "rgba(89, 89, 255,1.0)",
-              borderColor: "rgba(89, 89, 255,1.0)",
+              backgroundColor: "rgba(0, 119, 178, 1.0)",
+              borderColor: "rgba(0, 119, 178, 1.0)",
               data: this.data,
             },
           ],
