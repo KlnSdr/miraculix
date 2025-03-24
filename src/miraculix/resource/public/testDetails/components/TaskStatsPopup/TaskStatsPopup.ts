@@ -1,7 +1,12 @@
-class OpenTaskStatsButton implements Component {
+class TaskStatsPopup implements Component {
   // @ts-ignore
   private readonly task: Task;
   private readonly classId: string;
+
+  // @ts-ignore
+  public static show(classId: string, task: Task) {
+    new TaskStatsPopup(classId, task).render(edom.body);
+  }
 
   // @ts-ignore
   constructor(classId: string, task: Task) {
@@ -14,10 +19,11 @@ class OpenTaskStatsButton implements Component {
   }
 
   public instructions(): edomTemplate {
-  // @ts-ignore
-    return new Button("", () => {
-      TaskStatsPopup.show(this.classId, this.task);
-    }, ["fa", "fa-pie-chart", "statsButton"]).instructions();
+    // @ts-ignore
+    return new Popup(
+      this.task.title + " - Statistik",
+      new TaskStats(this.classId, this.task).instructions()
+    ).instructions();
   }
 
   public unload() {}
