@@ -29,7 +29,7 @@ class TestDetailContainer implements Component {
       classes: ["testDetailContainer"],
       id: "TestDetailContainer",
       children: [
-        new HeaderBar(this.examData.title, this.examData.id).instructions(),
+        new HeaderBar(this.examData).instructions(),
         {
           tag: "p",
           id: "outClazz",

@@ -164,10 +164,22 @@ class TaskDetail implements Component {
           tag: "td",
           text: student.name,
         },
-        ...points.map((pts: (number | null)[]) => {
+        ...points.map((pts: (number | null)[], mapIndex: number) => {
           return {
             tag: "td",
-            text: pts[index]?.toFixed(1) ?? "",
+            text:
+              (pts[index]?.toFixed(1) ?? "?") +
+              "/" +
+              (mapIndex === points.length - 1
+                ? this.task.subtasks
+                    // @ts-ignore
+                    .map((t: Task) => t.points)
+                    .reduce(
+                      (acc: number, val: number) => acc + val,
+                      this.task.points
+                    )
+                    .toFixed(1)
+                : this.task.subtasks[mapIndex].points.toFixed(1)),
           };
         }),
       ],

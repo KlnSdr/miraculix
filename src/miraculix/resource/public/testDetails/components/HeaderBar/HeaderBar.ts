@@ -1,10 +1,10 @@
 class HeaderBar implements Component {
-  private readonly examTitle: string;
-  private readonly examId: string;
+  // @ts-ignore
+  private readonly exam: Test;
 
-  constructor(examTitle: string, examId: string) {
-    this.examTitle = examTitle;
-    this.examId = examId;
+  // @ts-ignore
+  constructor(exam: Test) {
+    this.exam = exam;
   }
 
   public render(parent: edomElement) {
@@ -32,13 +32,15 @@ class HeaderBar implements Component {
         },
         {
           tag: "h1",
-          text: this.examTitle,
+          text: this.exam.title,
         },
         // @ts-ignore
-        new Button("", (_) => AddTaskPopup.show(this.examId), [
+        new Button("", (_) => AddTaskPopup.show(this.exam.id), [
           "fa",
           "fa-plus",
         ]).instructions(),
+        new OpenExamDetailsButton(this.exam.clazz, this.exam).instructions(),
+        new OpenExamStatsButton(this.exam).instructions(),
       ],
     };
   }
