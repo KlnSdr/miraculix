@@ -3,6 +3,10 @@ class TaskStats implements Component {
   private readonly task: Task;
   private readonly classId: string;
 
+  private labels: string[] = [];
+  private valuesAbs: number[] = [];
+  private valuesPercent: number[] = [];
+
   // @ts-ignore
   constructor(classId: string, task: Task) {
     this.task = task;
@@ -69,82 +73,86 @@ class TaskStats implements Component {
             res[res.length - 1][i] = sum;
           }
         }
-        this.renderWithDataNumbers(res);
+        this.prepareData(res);
+        this.renderWithDataNumbers();
       })
       .catch((e: any) => {
         alert(e);
       });
   }
 
-  private renderWithDataNumbers(points: Array<number | null>[]) {
-    const sums: number[] = points[points.length - 1].filter((v) => v !== null);
+  private prepareData(points: Array<number | null>[]) {
+    const sums: (number | null)[] = points[points.length - 1].filter(
+      (v) => v !== null
+    );
+    const maxPoints: number = this.task.subtasks.reduce(
+      // @ts-ignore
+      (acc: number, val: Task) => acc + val.points,
+      this.task.points
+    );
+
+    const labels: string[] = ["?"];
+    const valuesAbs: number[] = [];
+    const valuesPercent: number[] = [];
+
+    for (let i = 0.0; i <= maxPoints; i += 0.5) {
+      labels.push(i.toFixed(1));
+      valuesAbs.push(sums.filter((v) => v === i).length);
+      valuesPercent.push(
+        (100 * sums.filter((v) => v === i).length) / sums.length
+      );
+      sums.forEach((v: number | null, index: number) => {
+        if (v === i) {
+          sums[index] = null;
+        }
+      });
+    }
+
+    valuesAbs.unshift(sums.filter((v) => v !== null).length);
+    valuesPercent.unshift(
+      (100 * sums.filter((v) => v !== null).length) / sums.length
+    );
+
+    this.labels = labels;
+    this.valuesAbs = valuesAbs;
+    this.valuesPercent = valuesPercent;
+  }
+
+  private renderWithDataNumbers() {
     const container: edomElement = edom.findById("TaskDetail")!;
 
     while (container.children.length > 0) {
       container.children[0].delete();
     }
 
-    const maxPoints: number = this.task.subtasks.reduce(
-      // @ts-ignore
-      (acc: number, val: Task) => acc + val.points,
-      this.task.points
-    );
-    console.log(maxPoints);
-    console.log(this.task);
-
-    const labels: string[] = [];
-    const values: number[] = [];
-
-    for (let i = 0.0; i <= maxPoints; i += 0.5) {
-      labels.push(i.toFixed(1));
-      values.push(sums.filter((v) => v === i).length);
-    }
-
     edom.fromTemplate(
       [
         // @ts-ignore
-        new Button("", (_) => this.renderWithDataPercent(points), [
+        new Button("", (_) => this.renderWithDataPercent(), [
           "fa",
           "fa-percent",
         ]).instructions(),
-        new BarChart(labels, values).instructions(),
+        new BarChart(this.labels, this.valuesAbs).instructions(),
       ],
       container
     );
   }
 
-  private renderWithDataPercent(points: Array<number | null>[]) {
-    const sums: number[] = points[points.length - 1].filter((v) => v !== null);
+  private renderWithDataPercent() {
     const container: edomElement = edom.findById("TaskDetail")!;
 
     while (container.children.length > 0) {
       container.children[0].delete();
     }
 
-    const maxPoints: number = this.task.subtasks.reduce(
-      // @ts-ignore
-      (acc: number, val: Task) => acc + val.points,
-      this.task.points
-    );
-    console.log(maxPoints);
-    console.log(this.task);
-
-    const labels: string[] = [];
-    const values: number[] = [];
-
-    for (let i = 0.0; i <= maxPoints; i += 0.5) {
-      labels.push(i.toFixed(1));
-      values.push((100 * sums.filter((v) => v === i).length) / sums.length);
-    }
-
     edom.fromTemplate(
       [
         // @ts-ignore
-        new Button("", (_) => this.renderWithDataNumbers(points), [
+        new Button("", (_) => this.renderWithDataNumbers(), [
           "fa",
           "fa-hashtag",
         ]).instructions(),
-        new BarChart(labels, values).instructions(),
+        new BarChart(this.labels, this.valuesPercent).instructions(),
       ],
       container
     );
