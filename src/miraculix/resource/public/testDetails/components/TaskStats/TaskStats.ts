@@ -2,8 +2,6 @@ class TaskStats implements Component {
   // @ts-ignore
   private readonly task: Task;
   private readonly classId: string;
-  // @ts-ignore
-  private students: Student[] = [];
 
   // @ts-ignore
   constructor(classId: string, task: Task) {
@@ -40,7 +38,6 @@ class TaskStats implements Component {
       .then((clazz: Class) => StudentService.getStudentsOfClass(clazz))
       // @ts-ignore
       .then((students: Student[]) => {
-        this.students = students;
         return Promise.all([
           // @ts-ignore
           ...this.task.subtasks.map((t: Task) => {
@@ -72,14 +69,14 @@ class TaskStats implements Component {
             res[res.length - 1][i] = sum;
           }
         }
-        this.renderWithData(res);
+        this.renderWithDataNumbers(res);
       })
       .catch((e: any) => {
         alert(e);
       });
   }
 
-  private renderWithData(points: Array<number | null>[]) {
+  private renderWithDataNumbers(points: Array<number | null>[]) {
     const sums: number[] = points[points.length - 1].filter((v) => v !== null);
     const container: edomElement = edom.findById("TaskDetail")!;
 
@@ -103,7 +100,54 @@ class TaskStats implements Component {
       values.push(sums.filter((v) => v === i).length);
     }
 
-    edom.fromTemplate([new BarChart(labels, values).instructions()], container);
+    edom.fromTemplate(
+      [
+        // @ts-ignore
+        new Button("", (_) => this.renderWithDataPercent(points), [
+          "fa",
+          "fa-percent",
+        ]).instructions(),
+        new BarChart(labels, values).instructions(),
+      ],
+      container
+    );
+  }
+
+  private renderWithDataPercent(points: Array<number | null>[]) {
+    const sums: number[] = points[points.length - 1].filter((v) => v !== null);
+    const container: edomElement = edom.findById("TaskDetail")!;
+
+    while (container.children.length > 0) {
+      container.children[0].delete();
+    }
+
+    const maxPoints: number = this.task.subtasks.reduce(
+      // @ts-ignore
+      (acc: number, val: Task) => acc + val.points,
+      this.task.points
+    );
+    console.log(maxPoints);
+    console.log(this.task);
+
+    const labels: string[] = [];
+    const values: number[] = [];
+
+    for (let i = 0.0; i <= maxPoints; i += 0.5) {
+      labels.push(i.toFixed(1));
+      values.push((100 * sums.filter((v) => v === i).length) / sums.length);
+    }
+
+    edom.fromTemplate(
+      [
+        // @ts-ignore
+        new Button("", (_) => this.renderWithDataNumbers(points), [
+          "fa",
+          "fa-hashtag",
+        ]).instructions(),
+        new BarChart(labels, values).instructions(),
+      ],
+      container
+    );
   }
 
   public unload() {}
