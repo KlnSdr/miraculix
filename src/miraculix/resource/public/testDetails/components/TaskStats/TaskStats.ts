@@ -6,6 +6,8 @@ class TaskStats implements Component {
   private labels: string[] = [];
   private valuesAbs: number[] = [];
   private valuesPercent: number[] = [];
+  private average: string = "-1";
+  private median: string = "-1";
 
   // @ts-ignore
   constructor(classId: string, task: Task) {
@@ -91,6 +93,22 @@ class TaskStats implements Component {
       this.task.points
     );
 
+    const unNullSums: number[] = sums.filter((v) => v !== null);
+    unNullSums.sort();
+
+    this.average = (
+      unNullSums.reduce((acc: number, val: number) => acc + val, 0.0) /
+      unNullSums.length
+    ).toFixed(1);
+
+    this.median = (
+      unNullSums.length % 2 === 0
+        ? (unNullSums[unNullSums.length / 2 - 1] +
+            unNullSums[unNullSums.length / 2]) /
+          2
+        : unNullSums[(unNullSums.length + 1) / 2 - 1]
+    ).toFixed(1);
+
     const labels: string[] = ["?"];
     const valuesAbs: number[] = [];
     const valuesPercent: number[] = [];
@@ -131,7 +149,16 @@ class TaskStats implements Component {
         new Button("", (_) => this.renderWithDataPercent(), [
           "fa",
           "fa-percent",
+          "rightMargin",
         ]).instructions(),
+        {
+          tag: "label",
+          text: "Durchschnitt: " + this.average,
+        },
+        {
+          tag: "label",
+          text: ", Median: " + this.median,
+        },
         new BarChart(this.labels, this.valuesAbs).instructions(),
       ],
       container
@@ -151,7 +178,16 @@ class TaskStats implements Component {
         new Button("", (_) => this.renderWithDataNumbers(), [
           "fa",
           "fa-hashtag",
+          "rightMargin",
         ]).instructions(),
+        {
+          tag: "label",
+          text: "Durchschnitt: " + this.average,
+        },
+        {
+          tag: "label",
+          text: ", Median: " + this.median,
+        },
         new BarChart(this.labels, this.valuesPercent).instructions(),
       ],
       container
