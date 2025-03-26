@@ -13,6 +13,15 @@ interface Task {
   subtasks: Task[];
 }
 
+interface StudentResult {
+  student: string;
+  points: number;
+}
+
+interface ExamResult {
+  results: StudentResult[];
+}
+
 class TestsService {
   public static getAll(): Promise<Test[]> {
     return new Promise((resolve, reject) => {
@@ -63,6 +72,20 @@ class TestsService {
           return response.json();
         })
         .then((test: Test) => resolve(test))
+        .catch((e: any) => reject(e));
+    });
+  }
+
+  public static getAllPoints(examId: string): Promise<ExamResult> {
+    return new Promise((resolve, reject) => {
+      fetch(`{{CONTEXT}}/rest/exams/id/${examId}/results`)
+        .then((response: Response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status} ${response.statusText}`);
+          }
+          return response.json();
+        })
+        .then((result: ExamResult) => resolve(result))
         .catch((e: any) => reject(e));
     });
   }

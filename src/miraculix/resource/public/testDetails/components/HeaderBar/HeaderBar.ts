@@ -39,7 +39,7 @@ class HeaderBar implements Component {
           "fa",
           "fa-plus",
         ]).instructions(),
-        new OpenExamDetailsButton(this.exam.clazz, this.exam).instructions(),
+        new OpenExamDetailsButton(this.exam).instructions(),
         new OpenExamStatsButton(this.exam).instructions(),
       ],
     };

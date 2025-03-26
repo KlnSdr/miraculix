@@ -1,6 +1,11 @@
-class OpenExamDetailsButton implements Component {
+class ExamDetailPopup implements Component {
   // @ts-ignore
   private readonly exam: Test;
+
+  // @ts-ignore
+  public static show(exam: Test) {
+    new ExamDetailPopup(exam).render(edom.body);
+  }
 
   // @ts-ignore
   constructor(exam: Test) {
@@ -13,12 +18,9 @@ class OpenExamDetailsButton implements Component {
 
   public instructions(): edomTemplate {
     // @ts-ignore
-    return new Button(
-      "",
-      () => {
-        ExamDetailPopup.show(this.exam);
-      },
-      ["fa", "fa-external-link", "statsButton"]
+    return new Popup(
+      this.exam.title,
+      new ExamDetail(this.exam).instructions()
     ).instructions();
   }
 
