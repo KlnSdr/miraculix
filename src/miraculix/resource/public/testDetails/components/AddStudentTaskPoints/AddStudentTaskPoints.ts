@@ -2,14 +2,15 @@ class AddStudentTaskPoints implements Component {
   private points: number = 0.0;
   private student: string = "";
 
-  private readonly taskId: string;
+  // @ts-ignore
+  private readonly task: Task;
   // @ts-ignore
   private readonly students: Student[];
 
   // @ts-ignore
-  constructor(taskId: string, students: Student[]) {
+  constructor(task: Task, students: Student[]) {
     this.students = students;
-    this.taskId = taskId;
+    this.task = task;
   }
 
   public render(parent: edomElement) {
@@ -37,7 +38,7 @@ class AddStudentTaskPoints implements Component {
         ).instructions(),
         {
           tag: "label",
-          text: "Punkte",
+          text: "Punkte (von " + this.task.points.toFixed(1) + ")",
         },
         // @ts-ignore
         new Input((val: string) => {
@@ -68,7 +69,7 @@ class AddStudentTaskPoints implements Component {
 
     const studentId: string = selectedStudent.id;
     // @ts-ignore
-    TaskService.addNewPoints(this.taskId, studentId, this.points)
+    TaskService.addNewPoints(this.task.id, studentId, this.points)
       .then(() => {
         this.resetPopup();
       })

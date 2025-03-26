@@ -1,17 +1,18 @@
 class AddStudentTaskPointsPopup implements Component {
-  private readonly taskId: string;
+  // @ts-ignore
+  private readonly task: Task;
   // @ts-ignore
   private readonly students: Student[];
 
   // @ts-ignore
-  constructor(taskId: string, students: Student[]) {
+  constructor(task: Task, students: Student[]) {
     this.students = students;
-    this.taskId = taskId;
+    this.task = task;
   }
 
   // @ts-ignore
-  public static show(taskId: string, students: Student[]) {
-    new AddStudentTaskPointsPopup(taskId, students).render(edom.body);
+  public static show(task: Task, students: Student[]) {
+    new AddStudentTaskPointsPopup(task, students).render(edom.body);
   }
 
   public render(parent: edomElement) {
@@ -22,7 +23,7 @@ class AddStudentTaskPointsPopup implements Component {
     // @ts-ignore
     return new Popup(
       "",
-      new AddStudentTaskPoints(this.taskId, this.students).instructions()
+      new AddStudentTaskPoints(this.task, this.students).instructions()
     ).instructions();
   }
 

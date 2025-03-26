@@ -93,7 +93,7 @@ class TaskDetail implements Component {
             new Button(
               "",
               (_self: edomElement) => {
-                AddStudentTaskPointsPopup.show(this.task.id, this.students);
+                AddStudentTaskPointsPopup.show(this.task, this.students);
               },
               ["fa", "fa-plus"]
             ).instructions()
