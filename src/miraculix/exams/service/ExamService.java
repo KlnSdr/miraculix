@@ -55,4 +55,13 @@ public class ExamService {
 
         return exams;
     }
+
+    public boolean delete(Exam exam) {
+        for (Task task : exam.getTasks()) {
+            if (!TaskService.getInstance().delete(exam.getOwner(), task)) {
+                return false;
+            }
+        }
+        return Connector.delete(BUCKET_NAME, exam.getKey());
+    }
 }

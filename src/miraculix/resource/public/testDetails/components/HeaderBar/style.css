@@ -1,0 +1,27 @@
+.headerButtonBar {
+  display: grid inline;
+  grid-template-columns: repeat(4, 28px);
+  grid-template-rows: 28px;
+  grid-column-gap: 5px;
+  grid-row-gap: 0px;
+}
+
+.deletePopup {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: 1fr 28px;
+  grid-column-gap: 5px;
+  grid-row-gap: 0px;
+}
+
+.deletePopupText {
+  grid-area: 1 / 1 / 2 / 3;
+}
+
+.deletePopupDeleteButton {
+  grid-area: 2 / 1 / 3 / 2;
+}
+
+.deletePopupCancelButton {
+  grid-area: 2 / 2 / 3 / 3;
+}

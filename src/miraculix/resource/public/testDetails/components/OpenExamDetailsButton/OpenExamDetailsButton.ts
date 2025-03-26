@@ -18,7 +18,7 @@ class OpenExamDetailsButton implements Component {
       () => {
         ExamDetailPopup.show(this.exam);
       },
-      ["fa", "fa-external-link", "statsButton"]
+      ["fa", "fa-external-link"]
     ).instructions();
   }
 

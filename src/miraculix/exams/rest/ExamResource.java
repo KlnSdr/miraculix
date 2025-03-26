@@ -1,5 +1,6 @@
 package miraculix.exams.rest;
 
+import dobby.annotations.Delete;
 import dobby.annotations.Get;
 import dobby.annotations.Post;
 import dobby.annotations.Put;
@@ -184,6 +185,31 @@ public class ExamResource {
 
         context.getResponse().setCode(ResponseCodes.OK);
         context.getResponse().setBody(response);
+    }
+
+    @AuthorizedOnly
+    @Delete(BASE_PATH + "/id/{id}")
+    public void deleteExam(HttpContext context) {
+        final String id = context.getRequest().getParam("id");
+        final Exam exam = service.get(id, getOwner(context));
+
+        if (exam == null) {
+            context.getResponse().setCode(ResponseCodes.NOT_FOUND);
+            final NewJson response = new NewJson();
+            response.setString("error", "Exam not found");
+            context.getResponse().setBody(response);
+            return;
+        }
+
+        if (!service.delete(exam)) {
+            context.getResponse().setCode(ResponseCodes.INTERNAL_SERVER_ERROR);
+            final NewJson response = new NewJson();
+            response.setString("error", "Failed to delete exam");
+            context.getResponse().setBody(response);
+            return;
+        }
+
+        context.getResponse().setCode(ResponseCodes.NO_CONTENT);
     }
 
     private Task TaskFromJson(NewJson body) {

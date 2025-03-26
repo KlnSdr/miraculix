@@ -89,4 +89,17 @@ class TestsService {
         .catch((e: any) => reject(e));
     });
   }
+
+  public static delete(examId: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      fetch(`{{CONTEXT}}/rest/exams/id/${examId}`, { method: "DELETE" })
+        .then((response: Response) => {
+          if (response.status !== 204) {
+            throw new Error(`HTTP ${response.status} ${response.statusText}`);
+          }
+          resolve();
+        })
+        .catch((e: any) => reject(e));
+    });
+  }
 }

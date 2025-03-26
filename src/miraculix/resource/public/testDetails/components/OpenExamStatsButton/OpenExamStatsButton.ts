@@ -16,7 +16,6 @@ class OpenExamStatsButton implements Component {
     return new Button("", () => ExamStatsPopup.show(this.exam), [
       "fa",
       "fa-pie-chart",
-      "statsButton",
     ]).instructions();
   }
 
