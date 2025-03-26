@@ -64,16 +64,22 @@ public class TaskService {
         return Janus.parse(json, TaskStudentPoints.class);
     }
 
-    public Map<UUID, TaskStudentPoints> getPointsForTask(UUID owner, UUID taskId) {
-        final NewJson[] jsons = Connector.readPattern(STUDENT_POINTS_BUCKET_NAME, owner + "_" + taskId + "_.*", NewJson.class);
-        final Map<UUID, TaskStudentPoints> result = new HashMap<>();
+    public double getPointsForTask(UUID owner, Task task, UUID studentId) {
+        double points = 0.0;
 
-        for (NewJson json : jsons) {
-            final TaskStudentPoints points = Janus.parse(json, TaskStudentPoints.class);
-            if (points != null) {
-                result.put(points.getStudentId(), points);
+        for (Task subtask : task.getSubtasks()) {
+            final TaskStudentPoints data = getStudentPoints(owner, subtask.getId(), studentId);
+            if (data != null) {
+                points += data.getPoints();
             }
         }
-        return result;
+        if (task.getSubtasks().isEmpty()) {
+            final TaskStudentPoints data = getStudentPoints(owner, task.getId(), studentId);
+            if (data != null) {
+                points += data.getPoints();
+            }
+        }
+
+        return points;
     }
 }

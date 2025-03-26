@@ -10,10 +10,15 @@ import hades.annotations.AuthorizedOnly;
 import miraculix.exams.Exam;
 import miraculix.exams.Task;
 import miraculix.exams.service.ExamService;
+import miraculix.exams.service.TaskService;
 import miraculix.students.Class;
+import miraculix.students.Student;
 import miraculix.students.service.ClassService;
+import miraculix.students.service.StudentService;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -21,6 +26,8 @@ public class ExamResource {
     private static final String BASE_PATH = "/rest/exams";
     private static final ExamService service = ExamService.getInstance();
     private static final ClassService classService = ClassService.getInstance();
+    private static final TaskService taskService = TaskService.getInstance();
+    private static final StudentService studentService = StudentService.getInstance();
 
     @AuthorizedOnly
     @Post(BASE_PATH)
@@ -127,6 +134,56 @@ public class ExamResource {
 
         context.getResponse().setCode(ResponseCodes.OK);
         context.getResponse().setBody(exam.toJson());
+    }
+
+    @AuthorizedOnly
+    @Get(BASE_PATH + "/id/{id}/results")
+    public void getExamResults(HttpContext context) {
+        final String id = context.getRequest().getParam("id");
+        final Exam exam = service.get(id, getOwner(context));
+
+        if (exam == null) {
+            context.getResponse().setCode(ResponseCodes.NOT_FOUND);
+            final NewJson response = new NewJson();
+            response.setString("error", "Exam not found");
+            context.getResponse().setBody(response);
+            return;
+        }
+
+        final Class clazz = classService.find(exam.getClazz().toString(), getOwner(context));
+        final Map<UUID, Double> results = new HashMap<>();
+
+        for (UUID studentId : clazz.getStudents()) {
+            double points = 0.0;
+
+            for (Task task : exam.getTasks()) {
+                final double taskPoints = taskService.getPointsForTask(exam.getOwner(), task, studentId);
+                points += taskPoints;
+            }
+
+            results.put(studentId, points);
+        }
+
+        final NewJson response = new NewJson();
+        final List<NewJson> resultsList = results.entrySet().stream()
+                .map(e -> {
+                    final NewJson result = new NewJson();
+
+                    final Student student = studentService.find(e.getKey().toString(), getOwner(context));
+                    if (student != null) {
+                        result.setString("student", student.getName());
+                    } else {
+                        result.setString("student", e.getKey().toString());
+                    }
+                    result.setFloat("points", e.getValue().floatValue());
+                    return result;
+                })
+                .toList();
+
+        response.setList("results", resultsList.stream().map(o -> (Object) o).toList());
+
+        context.getResponse().setCode(ResponseCodes.OK);
+        context.getResponse().setBody(response);
     }
 
     private Task TaskFromJson(NewJson body) {
