@@ -13,13 +13,11 @@ class OpenExamStatsButton implements Component {
 
   public instructions(): edomTemplate {
     // @ts-ignore
-    return new Button(
-      "",
-      () => {
-        console.log("click");
-      },
-      ["fa", "fa-pie-chart", "statsButton"]
-    ).instructions();
+    return new Button("", () => ExamStatsPopup.show(this.exam), [
+      "fa",
+      "fa-pie-chart",
+      "statsButton",
+    ]).instructions();
   }
 
   public unload() {}
