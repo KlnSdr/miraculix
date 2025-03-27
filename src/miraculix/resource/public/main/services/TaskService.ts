@@ -1,12 +1,12 @@
 class TaskService {
-  public static addNewPoints(
+  public static setStudentPoints(
     taskId: string,
     studentId: string,
     points: number
   ): Promise<void> {
     return new Promise((resolve, reject) => {
       fetch(`{{CONTEXT}}/tasks/id/${taskId}/student/id/${studentId}`, {
-        method: "POST",
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },

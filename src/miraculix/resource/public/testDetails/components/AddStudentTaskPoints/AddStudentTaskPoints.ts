@@ -7,10 +7,19 @@ class AddStudentTaskPoints implements Component {
   // @ts-ignore
   private readonly students: Student[];
 
-  // @ts-ignore
-  constructor(task: Task, students: Student[]) {
+  constructor(
+    // @ts-ignore
+    task: Task,
+    // @ts-ignore
+    students: Student[],
+    initialPoints: string = "0.0",
+    initialStudent: string = ""
+  ) {
     this.students = students;
     this.task = task;
+
+    this.points = parseFloat(initialPoints);
+    this.student = initialStudent;
   }
 
   public render(parent: edomElement) {
@@ -34,7 +43,7 @@ class AddStudentTaskPoints implements Component {
           },
           // @ts-ignore
           this.students.map((s: Student) => s.name),
-          ""
+          this.student
         ).instructions(),
         {
           tag: "label",
@@ -43,7 +52,7 @@ class AddStudentTaskPoints implements Component {
         // @ts-ignore
         new Input((val: string) => {
           this.points = parseFloat(val.replace(",", "."));
-        }, "0.0").instructions(),
+        }, this.points).instructions(),
         {
           tag: "label",
         },
@@ -69,7 +78,7 @@ class AddStudentTaskPoints implements Component {
 
     const studentId: string = selectedStudent.id;
     // @ts-ignore
-    TaskService.addNewPoints(this.task.id, studentId, this.points)
+    TaskService.setStudentPoints(this.task.id, studentId, this.points)
       .then(() => {
         this.resetPopup();
       })

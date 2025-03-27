@@ -127,6 +127,12 @@ class TaskDetail implements Component {
       {
         tag: "tr",
         children: [
+          this.task.subtasks.length === 0
+            ? {
+                tag: "th",
+                text: "",
+              }
+            : null,
           {
             tag: "th",
             text: "Name",
@@ -142,7 +148,7 @@ class TaskDetail implements Component {
             tag: "th",
             text: "Punkte",
           },
-        ],
+        ].filter((v) => v !== null),
       },
     ];
   }
@@ -160,6 +166,25 @@ class TaskDetail implements Component {
     return {
       tag: "tr",
       children: [
+        this.task.subtasks.length === 0
+          ? {
+              tag: "td",
+              children: [
+                // @ts-ignore
+                new Button(
+                  "",
+                  (_self: edomElement) =>
+                    AddStudentTaskPointsPopup.show(
+                      this.task,
+                      this.students,
+                      points[0][index]?.toFixed(1),
+                      student.name
+                    ),
+                  ["fa", "fa-pencil"]
+                ).instructions(),
+              ],
+            }
+          : null,
         {
           tag: "td",
           text: student.name,
@@ -182,7 +207,7 @@ class TaskDetail implements Component {
                 : this.task.subtasks[mapIndex].points.toFixed(1)),
           };
         }),
-      ],
+      ].filter((v) => v !== null),
     };
   }
 

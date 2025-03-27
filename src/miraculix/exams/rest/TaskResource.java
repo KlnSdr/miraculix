@@ -1,7 +1,7 @@
 package miraculix.exams.rest;
 
 import dobby.annotations.Get;
-import dobby.annotations.Post;
+import dobby.annotations.Put;
 import dobby.io.HttpContext;
 import dobby.io.response.ResponseCodes;
 import dobby.util.json.NewJson;
@@ -14,8 +14,8 @@ public class TaskResource {
     private static final String BASE_PATH = "/tasks";
     private static final TaskService service = TaskService.getInstance();
 
-    @Post(BASE_PATH + "/id/{taskId}/student/id/{studentId}")
-    public void addPointsForStudent(HttpContext context) {
+    @Put(BASE_PATH + "/id/{taskId}/student/id/{studentId}")
+    public void setPointsForStudent(HttpContext context) {
         if (!context.getRequest().getBody().hasKey("points")) {
             context.getResponse().setCode(ResponseCodes.BAD_REQUEST);
             final NewJson json = new NewJson();
@@ -37,16 +37,6 @@ public class TaskResource {
             context.getResponse().setCode(ResponseCodes.BAD_REQUEST);
             final NewJson json = new NewJson();
             json.setString("error", "Invalid task or student id");
-            context.getResponse().setBody(json);
-            return;
-        }
-
-        final TaskStudentPoints points = service.getStudentPoints(getOwner(context), taskUUID, studentUUID);
-
-        if (points != null) {
-            context.getResponse().setCode(ResponseCodes.CONFLICT);
-            final NewJson json = new NewJson();
-            json.setString("error", "Points already exist");
             context.getResponse().setBody(json);
             return;
         }
