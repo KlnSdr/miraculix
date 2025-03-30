@@ -5,12 +5,20 @@ class AddStudent implements Component {
   private readonly initalName: string;
   private readonly initalId: string;
 
-  // @ts-ignore
-  constructor(clazz: Class, initalId: string, initalName: string) {
+  private caller: ClassDetail;
+
+  constructor(
+    // @ts-ignore
+    clazz: Class,
+    initalId: string,
+    initalName: string,
+    caller: ClassDetail
+  ) {
     this.clazz = clazz;
     this.initalId = initalId;
     this.initalName = initalName;
     this.name = initalName;
+    this.caller = caller;
   }
 
   public render(parent: edomElement) {
@@ -36,16 +44,21 @@ class AddStudent implements Component {
           }, this.initalName).instructions(),
         },
         // @ts-ignore
-        new Button("speichern", (self: edomElement) => {
-          // @ts-ignore
-          Popup.close(self);
-          this.createNewStudent();
-        }).instructions(),
+        new Button("speichern", (self: edomElement) =>
+          this.createNewStudent(self)
+        ).instructions(),
+      ],
+      handler: [
+        {
+          type: "unload",
+          id: "ondelete",
+          body: (_: edomElement) => this.caller.refresh(),
+        },
       ],
     };
   }
 
-  private createNewStudent() {
+  private createNewStudent(self: edomElement) {
     // @ts-ignore
     StudentService.createOrUpdate(this.name, this.initalId)
       // @ts-ignore
@@ -59,6 +72,8 @@ class AddStudent implements Component {
       })
       .then(() => {
         console.log("updated");
+        // @ts-ignore
+        Popup.close(self);
       })
       .catch((e: any) => alert(e));
   }

@@ -29,10 +29,10 @@ class Popup implements Component {
                   classes: ["popupTitle"],
                   text: this.title,
                 },
-                new Button("", (self: edomElement) =>
-                  Popup.close(self),
-                  ["fa", "fa-times"]
-                ).instructions(),
+                new Button("", (self: edomElement) => Popup.close(self), [
+                  "fa",
+                  "fa-times",
+                ]).instructions(),
               ],
             },
             ...(this.body !== null ? [this.body] : []),
@@ -67,11 +67,21 @@ class Popup implements Component {
     }
 
     if (self.parent.classes.includes("popupBackground")) {
+      this.runUnloadOnAllChildren(self);
       self.parent.delete();
       return;
     }
 
     Popup.close(self.parent);
+  }
+
+  private static runUnloadOnAllChildren(element: edomElement) {
+    const event = new Event("unload");
+    element.element.dispatchEvent(event);
+
+    element.children.forEach((child: edomElement) =>
+      this.runUnloadOnAllChildren(child)
+    );
   }
 
   public unload() {}

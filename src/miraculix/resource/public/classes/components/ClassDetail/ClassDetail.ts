@@ -1,6 +1,6 @@
 class ClassDetail implements Component {
   // @ts-ignore
-  private readonly clazz: Class;
+  private clazz: Class;
 
   // @ts-ignore
   constructor(clazz: Class) {
@@ -39,7 +39,7 @@ class ClassDetail implements Component {
         edom.fromTemplate(
           [
             // @ts-ignore
-            new Button("", () => AddStudentPopup.show(this.clazz), [
+            new Button("", () => AddStudentPopup.show(this.clazz, this), [
               "fa",
               "fa-plus",
             ]).instructions(),
@@ -105,14 +105,38 @@ class ClassDetail implements Component {
   }
 
   private editStudent(studentId: string, studentName: string) {
-    AddStudentPopup.show(this.clazz, studentId, studentName);
+    AddStudentPopup.show(this.clazz, this, studentId, studentName);
   }
 
   private deleteStudent(classId: string, studentId: string) {
     // @ts-ignore
     StudentService.delete(classId, studentId)
-      // TODO refresh student table
-      .then()
+      .then(() => {
+        this.clazz.students.splice(
+          this.clazz.students.findIndex((s: string) => s === studentId),
+          1
+        );
+        this.refresh();
+      })
+      .catch((e: any) => alert(e));
+  }
+
+  public refresh() {
+    const container: edomElement = edom.findById("ClassDetail")!;
+    while (container.children.length > 0) {
+      container.children[0].delete();
+    }
+    this.refreshData();
+  }
+
+  private refreshData() {
+    // @ts-ignore
+    ClassService.getClassById(this.clazz.id)
+      // @ts-ignore
+      .then((clazz: Class) => {
+        this.clazz = clazz;
+        this.loadStudents();
+      })
       .catch((e: any) => alert(e));
   }
 
