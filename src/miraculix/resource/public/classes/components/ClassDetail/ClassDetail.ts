@@ -43,12 +43,6 @@ class ClassDetail implements Component {
               "fa",
               "fa-plus",
             ]).instructions(),
-            // @ts-ignore
-            new Button("", () => {}, [
-              "fa",
-              "fa-trash",
-              "dangerButton",
-            ]).instructions(),
             this.generateStudentTable(students),
           ],
           container
