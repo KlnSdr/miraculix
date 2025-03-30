@@ -1,11 +1,16 @@
 class AddStudent implements Component {
-  private name: string = "";
+  private name: string;
   // @ts-ignore
   private readonly clazz: Class;
+  private readonly initalName: string;
+  private readonly initalId: string;
 
   // @ts-ignore
-  constructor(clazz: Class) {
+  constructor(clazz: Class, initalId: string, initalName: string) {
     this.clazz = clazz;
+    this.initalId = initalId;
+    this.initalName = initalName;
+    this.name = initalName;
   }
 
   public render(parent: edomElement) {
@@ -28,7 +33,7 @@ class AddStudent implements Component {
           // @ts-ignore
           ...new Input((val: string) => {
             this.name = val;
-          }, "").instructions(),
+          }, this.initalName).instructions(),
         },
         // @ts-ignore
         new Button("speichern", (self: edomElement) => {
@@ -42,11 +47,15 @@ class AddStudent implements Component {
 
   private createNewStudent() {
     // @ts-ignore
-    StudentService.create(this.name)
+    StudentService.createOrUpdate(this.name, this.initalId)
       // @ts-ignore
       .then((student: Student) => {
-        // @ts-ignore
-        return ClassService.addStudent(student, this.clazz);
+        if (this.initalId === "") {
+          // @ts-ignore
+          return ClassService.addStudent(student, this.clazz);
+        } else {
+          return null;
+        }
       })
       .then(() => {
         console.log("updated");

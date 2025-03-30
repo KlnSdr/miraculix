@@ -89,7 +89,10 @@ class ClassDetail implements Component {
           tag: "td",
           children: [
             // @ts-ignore
-            new Button("", () => {}, ["fa", "fa-pencil"]).instructions(),
+            new Button("", () => this.editStudent(student.id, student.name), [
+              "fa",
+              "fa-pencil",
+            ]).instructions(),
           ],
         },
         {
@@ -105,6 +108,10 @@ class ClassDetail implements Component {
         },
       ],
     };
+  }
+
+  private editStudent(studentId: string, studentName: string) {
+    AddStudentPopup.show(this.clazz, studentId, studentName);
   }
 
   private deleteStudent(classId: string, studentId: string) {

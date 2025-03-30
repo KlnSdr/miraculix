@@ -4,6 +4,37 @@ interface Student {
 }
 
 class StudentService {
+  public static createOrUpdate(name: string, id: string): Promise<Student> {
+    if (id === "") {
+      return this.create(name);
+    }
+    return this.update(name, id);
+  }
+
+  public static update(name: string, id: string): Promise<Student> {
+    return new Promise((resolve, reject) => {
+      fetch(`{{CONTEXT}}/rest/students/id/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name: name }),
+      })
+        .then((response: Response) => {
+          if (response.status !== 200) {
+            throw new Error(`HTTP ${response.status} ${response.statusText}`);
+          }
+          return response.json();
+        })
+        .then((student: Student) => {
+          resolve(student);
+        })
+        .catch((e: any) => {
+          reject(e);
+        });
+    });
+  }
+
   public static create(name: string): Promise<Student> {
     return new Promise((resolve, reject) => {
       fetch("{{CONTEXT}}/rest/students", {

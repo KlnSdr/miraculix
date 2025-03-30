@@ -2,6 +2,7 @@ package miraculix.students.rest;
 
 import dobby.annotations.Get;
 import dobby.annotations.Post;
+import dobby.annotations.Put;
 import dobby.io.HttpContext;
 import dobby.io.response.ResponseCodes;
 import dobby.util.json.NewJson;
@@ -52,6 +53,43 @@ public class StudentResource {
             context.getResponse().setCode(ResponseCodes.NOT_FOUND);
             final NewJson response = new NewJson();
             response.setString("error", "Student not found");
+            context.getResponse().setBody(response);
+            return;
+        }
+
+        context.getResponse().setCode(ResponseCodes.OK);
+        context.getResponse().setBody(student.toJson());
+    }
+
+    @AuthorizedOnly
+    @Put(BASE_PATH + "/id/{id}")
+    public void updateStudent(HttpContext context) {
+        final String id = context.getRequest().getParam("id");
+        final NewJson body = context.getRequest().getBody();
+
+        if (!validatePostRequest(body)) {
+            context.getResponse().setCode(ResponseCodes.BAD_REQUEST);
+            final NewJson response = new NewJson();
+            response.setString("error", "Invalid request body");
+            context.getResponse().setBody(response);
+            return;
+        }
+
+        final Student student = studentService.find(id, getOwner(context));
+
+        if (student == null) {
+            context.getResponse().setCode(ResponseCodes.NOT_FOUND);
+            final NewJson response = new NewJson();
+            response.setString("error", "Student not found");
+            context.getResponse().setBody(response);
+            return;
+        }
+
+        student.setName(body.getString("name"));
+        if (!studentService.save(student)) {
+            context.getResponse().setCode(ResponseCodes.INTERNAL_SERVER_ERROR);
+            final NewJson response = new NewJson();
+            response.setString("error", "Failed to update student");
             context.getResponse().setBody(response);
             return;
         }
