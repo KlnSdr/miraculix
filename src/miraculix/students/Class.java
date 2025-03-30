@@ -53,6 +53,10 @@ public class Class implements DataClass {
         this.students = students.stream().map(UUID::toString).toList();
     }
 
+    public void removeStudent(UUID studentId) {
+        students.remove(studentId.toString());
+    }
+
     public void addStudent(Student student) {
         students.add(student.getId().toString());
     }

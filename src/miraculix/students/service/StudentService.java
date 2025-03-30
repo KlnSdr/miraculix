@@ -2,6 +2,7 @@ package miraculix.students.service;
 
 import dobby.util.json.NewJson;
 import janus.Janus;
+import miraculix.exams.service.TaskService;
 import miraculix.students.Student;
 import thot.connector.Connector;
 
@@ -10,6 +11,7 @@ import java.util.UUID;
 public class StudentService {
     public static final String BUCKET_NAME = "miraculix_students";
     private static StudentService instance;
+    private static final TaskService taskService = TaskService.getInstance();
 
     private StudentService() {
     }
@@ -27,5 +29,13 @@ public class StudentService {
 
     public Student find(String id, UUID owner) {
         return Janus.parse(Connector.read(BUCKET_NAME, owner + "_" + id, NewJson.class), Student.class);
+    }
+
+    public boolean delete(Student student) {
+        if (student == null) {
+            return false;
+        }
+
+        return taskService.deletePointsForStudent(student.getOwner(), student.getId()) && Connector.delete(BUCKET_NAME, student.getKey());
     }
 }

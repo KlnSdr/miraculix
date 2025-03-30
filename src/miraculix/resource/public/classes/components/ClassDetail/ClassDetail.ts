@@ -96,15 +96,23 @@ class ClassDetail implements Component {
           tag: "td",
           children: [
             // @ts-ignore
-            new Button("", () => {}, [
-              "fa",
-              "fa-trash",
-              "dangerButton",
-            ]).instructions(),
+            new Button(
+              "",
+              () => this.deleteStudent(this.clazz.id, student.id),
+              ["fa", "fa-trash", "dangerButton"]
+            ).instructions(),
           ],
         },
       ],
     };
+  }
+
+  private deleteStudent(classId: string, studentId: string) {
+    // @ts-ignore
+    StudentService.delete(classId, studentId)
+      // TODO refresh student table
+      .then()
+      .catch((e: any) => alert(e));
   }
 
   public unload() {}

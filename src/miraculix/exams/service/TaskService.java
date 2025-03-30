@@ -115,4 +115,26 @@ public class TaskService {
         }
         return result;
     }
+
+    public boolean deletePointsForStudent(UUID owner, UUID studentId) {
+        final List<TaskStudentPoints> points = getPointsForStudent(owner, studentId);
+        for (TaskStudentPoints point : points) {
+            if (!Connector.delete(STUDENT_POINTS_BUCKET_NAME, point.getKey())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private List<TaskStudentPoints> getPointsForStudent(UUID owner, UUID studentId) {
+        final NewJson[] jsons = Connector.readPattern(STUDENT_POINTS_BUCKET_NAME, owner + "_.*_" + studentId, NewJson.class);
+        final List<TaskStudentPoints> result = new ArrayList<>();
+        for (NewJson json : jsons) {
+            final TaskStudentPoints points = Janus.parse(json, TaskStudentPoints.class);
+            if (points != null) {
+                result.add(points);
+            }
+        }
+        return result;
+    }
 }
