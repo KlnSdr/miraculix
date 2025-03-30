@@ -44,13 +44,12 @@ class ClassDetail implements Component {
               "fa-plus",
             ]).instructions(),
             // @ts-ignore
-            ...students.map((student: Student) => {
-              // TODO better display later
-              return {
-                tag: "p",
-                text: student.name,
-              };
-            }),
+            new Button("", () => {}, [
+              "fa",
+              "fa-trash",
+              "dangerButton",
+            ]).instructions(),
+            this.generateStudentTable(students),
           ],
           container
         );
@@ -60,6 +59,52 @@ class ClassDetail implements Component {
       });
 
     edom.fromTemplate([], container);
+  }
+
+  // @ts-ignore
+  private generateStudentTable(students: Student[]): edomTemplate {
+    return {
+      tag: "table",
+      classes: ["studentTable"],
+      children: [
+        {
+          tag: "tbody",
+          // @ts-ignore
+          children: students.map((s: Student) => this.studentLine(s)),
+        },
+      ],
+    };
+  }
+
+  // @ts-ignore
+  private studentLine(student: Student): edomTemplate {
+    return {
+      tag: "tr",
+      children: [
+        {
+          tag: "td",
+          text: student.name,
+        },
+        {
+          tag: "td",
+          children: [
+            // @ts-ignore
+            new Button("", () => {}, ["fa", "fa-pencil"]).instructions(),
+          ],
+        },
+        {
+          tag: "td",
+          children: [
+            // @ts-ignore
+            new Button("", () => {}, [
+              "fa",
+              "fa-trash",
+              "dangerButton",
+            ]).instructions(),
+          ],
+        },
+      ],
+    };
   }
 
   public unload() {}
