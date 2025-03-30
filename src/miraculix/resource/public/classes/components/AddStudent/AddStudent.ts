@@ -72,8 +72,13 @@ class AddStudent implements Component {
       })
       .then(() => {
         console.log("updated");
-        // @ts-ignore
-        Popup.close(self);
+        this.name = "";
+        (edom.findById("inputName") as edomInputElement).value = "";
+        edom.findById("inputName")?.focus();
+        if (this.initalId !== "") {
+          // @ts-ignore
+          Popup.close(self);
+        }
       })
       .catch((e: any) => alert(e));
   }
