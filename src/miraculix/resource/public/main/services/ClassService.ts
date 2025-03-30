@@ -10,11 +10,6 @@ class ClassService {
 
   public static getClasses(): Promise<Class[]> {
     return new Promise((resolve, reject) => {
-      if (this.classes !== null) {
-        resolve(this.classes);
-        return;
-      }
-
       fetch("{{CONTEXT}}/rest/classes")
         .then((response: Response) => {
           if (!response.ok) {
