@@ -8,6 +8,8 @@ import dobby.io.HttpContext;
 import dobby.io.response.ResponseCodes;
 import dobby.util.json.NewJson;
 import hades.annotations.AuthorizedOnly;
+import hades.apidocs.annotations.ApiDoc;
+import hades.apidocs.annotations.ApiResponse;
 import miraculix.exams.Exam;
 import miraculix.exams.Task;
 import miraculix.exams.service.ExamService;
@@ -30,6 +32,16 @@ public class ExamResource {
     private static final TaskService taskService = TaskService.getInstance();
     private static final StudentService studentService = StudentService.getInstance();
 
+    @ApiDoc(
+            summary = "Create a new exam",
+            description = "Create a new exam for the provided class with the given title",
+            baseUrl = BASE_PATH
+    )
+    @ApiResponse(code = 201, message = "Exam created successfully")
+    @ApiResponse(code = 400, message = "Invalid request body")
+    @ApiResponse(code = 403, message = "Unauthorized")
+    @ApiResponse(code = 404, message = "Class not found")
+    @ApiResponse(code = 500, message = "Failed to save exam")
     @AuthorizedOnly
     @Post(BASE_PATH)
     public void createExam(HttpContext context) {
@@ -68,6 +80,15 @@ public class ExamResource {
         context.getResponse().setBody(exam.toJson());
     }
 
+    @ApiDoc(
+            summary = "Get an exam by ID",
+            description = "Retrieve an exam by its ID",
+            baseUrl = BASE_PATH
+    )
+    @ApiResponse(code = 200, message = "Exam found")
+    @ApiResponse(code = 403, message = "Unauthorized")
+    @ApiResponse(code = 404, message = "Exam not found")
+    @ApiResponse(code = 500, message = "Failed to retrieve exam")
     @AuthorizedOnly
     @Get(BASE_PATH + "/id/{id}")
     public void getExam(HttpContext context) {
@@ -86,6 +107,14 @@ public class ExamResource {
         context.getResponse().setBody(exam.toJson());
     }
 
+    @ApiDoc(
+            summary = "Get all exams",
+            description = "Retrieve all exams for the authenticated user",
+            baseUrl = BASE_PATH
+    )
+    @ApiResponse(code = 200, message = "Exams found")
+    @ApiResponse(code = 403, message = "Unauthorized")
+    @ApiResponse(code = 500, message = "Failed to retrieve exams")
     @AuthorizedOnly
     @Get(BASE_PATH)
     public void getExams(HttpContext context) {
@@ -98,6 +127,16 @@ public class ExamResource {
         context.getResponse().setBody(response);
     }
 
+    @ApiDoc(
+            summary = "Add a task to an exam",
+            description = "Add a task to an existing exam",
+            baseUrl = BASE_PATH
+    )
+    @ApiResponse(code = 200, message = "Exam updated successfully")
+    @ApiResponse(code = 400, message = "Invalid request body")
+    @ApiResponse(code = 403, message = "Unauthorized")
+    @ApiResponse(code = 404, message = "Exam not found")
+    @ApiResponse(code = 500, message = "Failed to update exam")
     @AuthorizedOnly
     @Put(BASE_PATH + "/id/{id}/tasks")
     public void addTaskToExam(HttpContext context) {
@@ -137,6 +176,15 @@ public class ExamResource {
         context.getResponse().setBody(exam.toJson());
     }
 
+    @ApiDoc(
+            summary = "Get exam results",
+            description = "Retrieve the results of an exam for all students in the class",
+            baseUrl = BASE_PATH
+    )
+    @ApiResponse(code = 200, message = "Results found")
+    @ApiResponse(code = 403, message = "Unauthorized")
+    @ApiResponse(code = 404, message = "Exam not found")
+    @ApiResponse(code = 500, message = "Failed to retrieve results")
     @AuthorizedOnly
     @Get(BASE_PATH + "/id/{id}/results")
     public void getExamResults(HttpContext context) {
@@ -187,6 +235,15 @@ public class ExamResource {
         context.getResponse().setBody(response);
     }
 
+    @ApiDoc(
+            summary = "Delete an exam",
+            description = "Deletes an exam and all tasks and results associated with it",
+            baseUrl = BASE_PATH
+    )
+    @ApiResponse(code = 204, message = "Exam deleted successfully")
+    @ApiResponse(code = 403, message = "Unauthorized")
+    @ApiResponse(code = 404, message = "Exam not found")
+    @ApiResponse(code = 500, message = "Failed to delete exam")
     @AuthorizedOnly
     @Delete(BASE_PATH + "/id/{id}")
     public void deleteExam(HttpContext context) {

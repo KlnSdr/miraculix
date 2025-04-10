@@ -8,6 +8,8 @@ import dobby.io.HttpContext;
 import dobby.io.response.ResponseCodes;
 import dobby.util.json.NewJson;
 import hades.annotations.AuthorizedOnly;
+import hades.apidocs.annotations.ApiDoc;
+import hades.apidocs.annotations.ApiResponse;
 import miraculix.students.Class;
 import miraculix.students.Student;
 import miraculix.students.service.ClassService;
@@ -21,6 +23,15 @@ public class ClassResource {
     private static final ClassService classService = ClassService.getInstance();
     private static final StudentService studentService = StudentService.getInstance();
 
+    @ApiDoc(
+            summary = "Create a new class",
+            description = "Create a new class with the given name.",
+            baseUrl = BASE_PATH
+    )
+    @ApiResponse(code = 201, message = "Class created successfully")
+    @ApiResponse(code = 400, message = "Invalid request body")
+    @ApiResponse(code = 403, message = "Unauthorized")
+    @ApiResponse(code = 500, message = "Failed to save class")
     @AuthorizedOnly
     @Post(BASE_PATH)
     public void createClass(HttpContext context) {
@@ -48,6 +59,14 @@ public class ClassResource {
         context.getResponse().setBody(clazz.toJson());
     }
 
+    @ApiDoc(
+            summary = "Get all classes",
+            description = "Retrieve all classes for the authenticated user.",
+            baseUrl = BASE_PATH
+    )
+    @ApiResponse(code = 200, message = "Classes retrieved successfully")
+    @ApiResponse(code = 403, message = "Unauthorized")
+    @ApiResponse(code = 500, message = "Failed to retrieve classes")
     @AuthorizedOnly
     @Get(BASE_PATH)
     public void getAllClasses(HttpContext context) {
@@ -60,6 +79,15 @@ public class ClassResource {
         context.getResponse().setBody(response);
     }
 
+    @ApiDoc(
+            summary = "Get a class by ID",
+            description = "Retrieve a class by its ID.",
+            baseUrl = BASE_PATH
+    )
+    @ApiResponse(code = 200, message = "Class retrieved successfully")
+    @ApiResponse(code = 403, message = "Unauthorized")
+    @ApiResponse(code = 404, message = "Class not found")
+    @ApiResponse(code = 500, message = "Failed to retrieve class")
     @AuthorizedOnly
     @Get(BASE_PATH + "/id/{id}")
     public void getClass(HttpContext context) {
@@ -78,6 +106,15 @@ public class ClassResource {
         context.getResponse().setBody(clazz.toJson());
     }
 
+    @ApiDoc(
+            summary = "Add a student to a class",
+            description = "Add a student to a class by their ID.",
+            baseUrl = BASE_PATH
+    )
+    @ApiResponse(code = 200, message = "Student added to class successfully")
+    @ApiResponse(code = 403, message = "Unauthorized")
+    @ApiResponse(code = 404, message = "Class or student not found")
+    @ApiResponse(code = 500, message = "Failed to save class")
     @AuthorizedOnly
     @Put(BASE_PATH + "/id/{classId}/add-student/id/{studentId}")
     public void addStudentToClass(HttpContext context) {
@@ -115,6 +152,15 @@ public class ClassResource {
         context.getResponse().setBody(clazz.toJson());
     }
 
+    @ApiDoc(
+            summary = "Delete a student from a class",
+            description = "Delete a student from a class by their ID.",
+            baseUrl = BASE_PATH
+    )
+    @ApiResponse(code = 204, message = "Student deleted from class successfully")
+    @ApiResponse(code = 403, message = "Unauthorized")
+    @ApiResponse(code = 404, message = "Class or student not found")
+    @ApiResponse(code = 500, message = "Failed to delete student")
     @AuthorizedOnly
     @Delete(BASE_PATH + "/id/{classId}/student/id/{studentId}")
     public void deleteStudent(HttpContext context) {
