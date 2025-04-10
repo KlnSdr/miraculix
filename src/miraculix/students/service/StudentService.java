@@ -1,10 +1,10 @@
 package miraculix.students.service;
 
 import dobby.util.json.NewJson;
-import janus.Janus;
 import miraculix.exams.service.TaskService;
 import miraculix.students.Student;
 import thot.connector.Connector;
+import thot.janus.Janus;
 
 import java.util.UUID;
 

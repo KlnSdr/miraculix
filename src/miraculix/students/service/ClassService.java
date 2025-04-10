@@ -1,9 +1,9 @@
 package miraculix.students.service;
 
 import dobby.util.json.NewJson;
-import janus.Janus;
 import miraculix.students.Class;
 import thot.connector.Connector;
+import thot.janus.Janus;
 
 import java.util.ArrayList;
 import java.util.UUID;

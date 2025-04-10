@@ -1,12 +1,12 @@
 package miraculix.exams.filter;
 
+import dobby.Config;
 import dobby.files.StaticFile;
 import dobby.files.service.StaticFileService;
 import dobby.filter.Filter;
 import dobby.filter.FilterType;
 import dobby.io.HttpContext;
 import dobby.io.response.ResponseCodes;
-import dobby.util.Config;
 import dobby.util.json.NewJson;
 import hades.template.TemplateEngine;
 import hades.user.service.UserService;

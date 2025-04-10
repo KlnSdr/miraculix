@@ -1,11 +1,11 @@
 package miraculix.exams;
 
 import dobby.util.json.NewJson;
-import janus.DataClass;
-import janus.annotations.JanusInteger;
-import janus.annotations.JanusList;
-import janus.annotations.JanusString;
-import janus.annotations.JanusUUID;
+import thot.janus.DataClass;
+import thot.janus.annotations.JanusInteger;
+import thot.janus.annotations.JanusList;
+import thot.janus.annotations.JanusString;
+import thot.janus.annotations.JanusUUID;
 
 import java.util.ArrayList;
 import java.util.List;
