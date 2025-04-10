@@ -1,0 +1,9 @@
+.labeledInput {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+}
+
+.label {
+    color: var(--font-dark);
+}

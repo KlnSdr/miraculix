@@ -64,3 +64,32 @@ cd ../logout || exit
 mkdir ../../static/logout
 cp -r index.html ../../static/logout
 echo "done!"
+
+echo "building /hades/login ======================"
+cd ../login || exit
+ed pack
+
+perl -i -pe 'next if /src="https/; next if /src="{{/; s/src="/src="{{CONTEXT}}\/hades\/login\//g' index.html
+perl -i -pe 'next if /src="https/; next if /src="{{/; s/src="/src="{{CONTEXT}}\/hades\/login\//g' docs/index.html
+
+perl -i -pe 'next if /href="https/; next if /href="{{/; s/href="/href="{{CONTEXT}}\/hades\/login\//g' index.html
+perl -i -pe 'next if /href="https/; next if /href="{{/; s/href="/href="{{CONTEXT}}\/hades\/login\//g' docs/index.html
+
+mkdir ../../static/hades
+mkdir ../../static/hades/login
+cp -r docs/* ../../static/hades/login
+rm -rf docs
+
+echo "building /hades/signup ======================"
+cd ../signup || exit
+ed pack
+
+perl -i -pe 'next if /src="https/; next if /src="{{/; s/src="/src="{{CONTEXT}}\/hades\/signup\//g' index.html
+perl -i -pe 'next if /src="https/; next if /src="{{/; s/src="/src="{{CONTEXT}}\/hades\/signup\//g' docs/index.html
+
+perl -i -pe 'next if /href="https/; next if /href="{{/; s/href="/href="{{CONTEXT}}\/hades\/signup\//g' index.html
+perl -i -pe 'next if /href="https/; next if /href="{{/; s/href="/href="{{CONTEXT}}\/hades\/signup\//g' docs/index.html
+
+mkdir ../../static/hades/signup
+cp -r docs/* ../../static/hades/signup
+rm -rf docs
