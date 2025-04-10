@@ -7,10 +7,12 @@ class ExamStats implements Component {
   private valuesPercent: number[] = [];
   private average: string = "-1";
   private median: string = "-1";
+  private maxPoints: number = 0.0;
 
   // @ts-ignore
   constructor(exam: Test) {
     this.exam = exam;
+    this.maxPoints = ExamDetail.calcMaxPoints(exam);
   }
 
   public render(parent: edomElement) {
@@ -50,11 +52,6 @@ class ExamStats implements Component {
       parseFloat(v.points.toFixed(1))
     );
 
-    const maxPoints: number = dat.reduce(
-      (acc: number, val: number | null) => acc + (val ?? 0.0),
-      0.0
-    );
-
     const unNullSums: number[] = dat.filter((v) => v !== null);
     unNullSums.sort();
 
@@ -75,7 +72,7 @@ class ExamStats implements Component {
     const valuesAbs: number[] = [];
     const valuesPercent: number[] = [];
 
-    for (let i = 0.0; i <= maxPoints; i += 0.5) {
+    for (let i = 0.0; i <= this.maxPoints; i += 0.5) {
       labels.push(i.toFixed(1));
       valuesAbs.push(dat.filter((v) => v === i).length);
       valuesPercent.push(

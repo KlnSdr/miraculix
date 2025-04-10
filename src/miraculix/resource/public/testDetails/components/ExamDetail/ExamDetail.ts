@@ -1,10 +1,26 @@
 class ExamDetail implements Component {
   // @ts-ignore
   private readonly exam: Test;
+  private maxPoints: number = 0.0;
 
   // @ts-ignore
   constructor(exam: Test) {
     this.exam = exam;
+    this.maxPoints = ExamDetail.calcMaxPoints(exam);
+  }
+
+  // @ts-ignore
+  public static calcMaxPoints(exam: Test): number {
+    // @ts-ignore
+    return exam.tasks.reduce((acc: number, task: Task) => {
+      if (task.subtasks.length > 0) {
+        // @ts-ignore
+        return task.subtasks.reduce((accc: number, subtask: Task) => {
+          return accc + subtask.points;
+        }, 0.0);
+      }
+      return acc + task.points;
+    }, 0.0);
   }
 
   public render(parent: edomElement) {
@@ -87,7 +103,7 @@ class ExamDetail implements Component {
         },
         {
           tag: "td",
-          text: points.toFixed(1),
+          text: points.toFixed(1) + "/" + this.maxPoints.toFixed(1),
         },
       ],
     };
