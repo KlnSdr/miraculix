@@ -3,7 +3,7 @@
   "project": {
     "entry": "miraculix.MiraculixApplication",
     "name": "miraculix",
-    "version": "0.0",
+    "version": "1.0",
     "group": "dobby",
     "dependencies": [
       {

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 APPLICATION_JSON="src/miraculix/resource/application.json"
-FRONTEND_LOCATION="src/miraculix/resource/public"
+FRONTEND_LOCATION="src/miraculix/resource"
 IMAGE_NAME="miraculix"
 
 increment_minor_version() {
@@ -48,8 +48,6 @@ cd - || exit 1
 
 git add -u
 git commit -m "[increase version to $NEW_VERSION]"
-
-read  -n 1 -p "build the jar and press any key to continue..."
 
 echo "Building Docker image..."
 docker build -t "$IMAGE_NAME:$NEW_VERSION" -t "$IMAGE_NAME:latest" .

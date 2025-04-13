@@ -3,7 +3,7 @@
     "name": "miraculix",
     "version": "0.0",
     "dbHost": "thot-container",
-    "devMode": true
+    "devMode": false
   },
   "dobby": {
     "staticContent": {
