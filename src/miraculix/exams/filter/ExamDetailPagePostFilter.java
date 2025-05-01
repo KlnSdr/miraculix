@@ -87,8 +87,7 @@ public class ExamDetailPagePostFilter implements Filter {
         final StaticFile renderedFile = TemplateEngine.render(file, data);
 
         ctx.getResponse().setCode(ResponseCodes.OK);
-        ctx.getResponse().setHeader("Content-Type", renderedFile.getContentType());
-        ctx.getResponse().setBody(renderedFile.getContent());
+        ctx.getResponse().sendFile(renderedFile);
 
         return true;
     }
