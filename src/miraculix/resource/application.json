@@ -16,7 +16,7 @@
     "port": 1711,
     "threads": 10,
     "mode": "http",
-    "logLevel": "WARN"
+    "logLevel": "DEBUG"
   },
   "hades": {
     "disableWelcomeMessage": true,
