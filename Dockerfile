@@ -10,7 +10,7 @@ FROM gcr.io/distroless/java21
 
 WORKDIR /app
 
-COPY --from=builder /app/build/miraculix-1.0.jar /app/app.jar
+COPY --from=builder /app/build/miraculix-1.1.jar /app/app.jar
 
 EXPOSE 1711
 
