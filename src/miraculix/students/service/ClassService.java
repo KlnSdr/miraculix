@@ -23,19 +23,26 @@ public class ClassService {
     }
 
     public boolean save(Class clazz) {
-        return Connector.write(BUCKET_NAME, clazz.getKey(), clazz.toJson());
+        return Connector.write(BUCKET_NAME, clazz.getKey(), clazz.getEncrypted());
     }
 
     public Class find(String id, UUID owner) {
-        return Janus.parse(Connector.read(BUCKET_NAME, owner + "_" + id, NewJson.class), Class.class);
+        return Janus.parse(
+                new Class().decrypt(
+                    Connector.read(BUCKET_NAME, owner + "_" + id, NewJson.class),
+                    owner
+                ),
+                Class.class
+        );
     }
 
     public Class[] findAll(UUID owner) {
         final NewJson[] jsons = Connector.readPattern(BUCKET_NAME, owner.toString() + "_.*", NewJson.class);
         final ArrayList<Class> classes = new ArrayList<>();
+        final Class clazz = new Class();
 
         for (NewJson json : jsons) {
-            classes.add(Janus.parse(json, Class.class));
+            classes.add(Janus.parse(clazz.decrypt(json, owner), Class.class));
         }
 
         return classes.toArray(new Class[0]);

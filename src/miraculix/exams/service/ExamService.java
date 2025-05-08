@@ -29,16 +29,22 @@ public class ExamService {
             }
         }
 
-        return Connector.write(BUCKET_NAME, exam.getKey(), exam.toStoreJson());
+        return Connector.write(BUCKET_NAME, exam.getKey(), exam.getEncrypted());
     }
 
     public Exam get(String id, UUID owner) {
-        final Exam exam = Janus.parse(Connector.read(BUCKET_NAME, owner + "_" + id, NewJson.class), Exam.class);
+        final Exam exam = Janus.parse(
+                new Exam().decrypt(
+                    Connector.read(BUCKET_NAME, owner + "_" + id, NewJson.class),
+                    owner
+                ),
+            Exam.class
+        );
         if (exam == null) {
             return null;
         }
 
-        exam.setTasks(TaskService.getInstance().get(exam.getTaskIds()));
+        exam.setTasks(TaskService.getInstance().get(exam.getTaskIds(), owner));
 
         return exam;
     }
@@ -46,10 +52,11 @@ public class ExamService {
     public Exam[] getAll(UUID owner) {
         final NewJson[] jsons = Connector.readPattern(BUCKET_NAME, owner + "_.*", NewJson.class);
         final Exam[] exams = new Exam[jsons.length];
+        final Exam ex = new Exam();
 
         for (int i = 0; i < jsons.length; i++) {
-            final Exam exam = Janus.parse(jsons[i], Exam.class);
-            exam.setTasks(TaskService.getInstance().get(exam.getTaskIds()));
+            final Exam exam = Janus.parse(ex.decrypt(jsons[i], owner), Exam.class);
+            exam.setTasks(TaskService.getInstance().get(exam.getTaskIds(), owner));
             exams[i] = exam;
         }
 

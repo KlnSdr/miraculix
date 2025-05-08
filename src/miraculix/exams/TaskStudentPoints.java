@@ -1,13 +1,14 @@
 package miraculix.exams;
 
 import dobby.util.json.NewJson;
+import hades.security.Encryptable;
 import thot.janus.DataClass;
 import thot.janus.annotations.JanusInteger;
 import thot.janus.annotations.JanusUUID;
 
 import java.util.UUID;
 
-public class TaskStudentPoints implements DataClass {
+public class TaskStudentPoints extends Encryptable implements DataClass {
     @JanusUUID("studentId")
     private UUID studentId;
     @JanusUUID("taskId")
@@ -66,13 +67,33 @@ public class TaskStudentPoints implements DataClass {
         return json;
     }
 
-    public NewJson toStoreJson() {
+    @Override
+    public NewJson getEncrypted() {
+        setUuid(owner);
+
         final NewJson json = new NewJson();
-        json.setString("studentId", studentId.toString());
-        json.setString("taskId", taskId.toString());
-        json.setString("owner", owner.toString());
-        json.setInt("points", points);
-        json.setInt("pointsComma", pointsComma);
+        json.setString("studentId", encrypt(studentId));
+        json.setString("taskId", encrypt(taskId));
+        json.setString("owner", encrypt(owner));
+        json.setString("points", encrypt(points));
+        json.setString("pointsComma", encrypt(pointsComma));
+        return json;
+    }
+
+    @Override
+    public NewJson decrypt(NewJson newJson, UUID uuid) {
+        if (newJson == null) {
+            return null;
+        }
+
+        setUuid(uuid);
+
+        final NewJson json = new NewJson();
+        json.setString("studentId", decryptString(newJson.getString("studentId")));
+        json.setString("taskId", decryptString(newJson.getString("taskId")));
+        json.setString("owner", decryptString(newJson.getString("owner")));
+        json.setInt("points", decryptInt(newJson.getString("points")));
+        json.setInt("pointsComma", decryptInt(newJson.getString("pointsComma")));
         return json;
     }
 }

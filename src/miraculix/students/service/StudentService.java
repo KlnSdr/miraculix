@@ -24,11 +24,17 @@ public class StudentService {
     }
 
     public boolean save(Student student) {
-        return Connector.write(BUCKET_NAME, student.getKey(), student.toJson());
+        return Connector.write(BUCKET_NAME, student.getKey(), student.getEncrypted());
     }
 
     public Student find(String id, UUID owner) {
-        return Janus.parse(Connector.read(BUCKET_NAME, owner + "_" + id, NewJson.class), Student.class);
+        return Janus.parse(
+                new Student().decrypt(
+                    Connector.read(BUCKET_NAME, owner + "_" + id, NewJson.class),
+                    owner
+                ),
+                Student.class
+        );
     }
 
     public boolean delete(Student student) {

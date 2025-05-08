@@ -1,13 +1,14 @@
 package miraculix.students;
 
 import dobby.util.json.NewJson;
+import hades.security.Encryptable;
 import thot.janus.DataClass;
 import thot.janus.annotations.JanusString;
 import thot.janus.annotations.JanusUUID;
 
 import java.util.UUID;
 
-public class Student implements DataClass {
+public class Student extends Encryptable implements DataClass {
     @JanusUUID("id")
     private UUID id;
     @JanusUUID("owner")
@@ -51,6 +52,30 @@ public class Student implements DataClass {
         json.setString("id", id.toString());
         json.setString("owner", owner.toString());
         json.setString("name", name);
+        return json;
+    }
+
+    @Override
+    public NewJson getEncrypted() {
+        setUuid(owner);
+        final NewJson json = new NewJson();
+        json.setString("id", encrypt(id));
+        json.setString("owner", encrypt(owner));
+        json.setString("name", encrypt(name));
+        return json;
+    }
+
+    @Override
+    public NewJson decrypt(NewJson newJson, UUID ownerUUID) {
+        if (newJson == null) {
+            return null;
+        }
+
+        setUuid(ownerUUID);
+        final NewJson json = new NewJson();
+        json.setString("id", decryptString(newJson.getString("id")));
+        json.setString("owner", decryptString(newJson.getString("owner")));
+        json.setString("name", decryptString(newJson.getString("name")));
         return json;
     }
 }

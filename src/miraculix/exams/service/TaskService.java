@@ -30,23 +30,24 @@ public class TaskService {
             }
         }
 
-        return Connector.write(BUCKET_NAME, task.getKey(), task.toStoreJson());
+        return Connector.write(BUCKET_NAME, task.getKey(), task.getEncrypted());
     }
 
     public Task get(String id) {
         return Janus.parse(Connector.read(BUCKET_NAME, id, NewJson.class), Task.class);
     }
 
-    public List<Task> get(List<String> ids) {
+    public List<Task> get(List<String> ids, UUID owner) {
         final String regex = "(" + String.join("|", ids) + ")";
         final NewJson[] jsons = Connector.readPattern(BUCKET_NAME, regex, NewJson.class);
         final List<Task> result = new ArrayList<>();
+        final Task decryptTask = new Task();
 
         for (NewJson json : jsons) {
-            final Task task = Janus.parse(json, Task.class);
+            final Task task = Janus.parse(decryptTask.decrypt(json, owner), Task.class);
 
             if (task != null) {
-                task.setSubtasks(get(task.getSubtaskIds()));
+                task.setSubtasks(get(task.getSubtaskIds(), owner));
                 result.add(task);
             }
         }
@@ -56,12 +57,12 @@ public class TaskService {
 
     public boolean saveStudentPoints(UUID owner, UUID studentId, UUID taskId, double points) {
         final TaskStudentPoints data = new TaskStudentPoints(owner, taskId, studentId, points);
-        return Connector.write(STUDENT_POINTS_BUCKET_NAME, data.getKey(), data.toStoreJson());
+        return Connector.write(STUDENT_POINTS_BUCKET_NAME, data.getKey(), data.getEncrypted());
     }
 
     public TaskStudentPoints getStudentPoints(UUID owner, UUID taskId, UUID studentId) {
         final NewJson json = Connector.read(STUDENT_POINTS_BUCKET_NAME, owner + "_" + taskId + "_" + studentId, NewJson.class);
-        return Janus.parse(json, TaskStudentPoints.class);
+        return Janus.parse(new TaskStudentPoints().decrypt(json, owner), TaskStudentPoints.class);
     }
 
     public double getPointsForTask(UUID owner, Task task, UUID studentId) {
@@ -107,8 +108,9 @@ public class TaskService {
     public List<TaskStudentPoints> getPointsForTask(UUID owner, UUID taskId) {
         final NewJson[] jsons = Connector.readPattern(STUDENT_POINTS_BUCKET_NAME, owner + "_" + taskId + "_.*", NewJson.class);
         final List<TaskStudentPoints> result = new ArrayList<>();
+        final TaskStudentPoints decryptTask = new TaskStudentPoints();
         for (NewJson json : jsons) {
-            final TaskStudentPoints points = Janus.parse(json, TaskStudentPoints.class);
+            final TaskStudentPoints points = Janus.parse(decryptTask.decrypt(json, owner), TaskStudentPoints.class);
             if (points != null) {
                 result.add(points);
             }
@@ -129,8 +131,9 @@ public class TaskService {
     private List<TaskStudentPoints> getPointsForStudent(UUID owner, UUID studentId) {
         final NewJson[] jsons = Connector.readPattern(STUDENT_POINTS_BUCKET_NAME, owner + "_.*_" + studentId, NewJson.class);
         final List<TaskStudentPoints> result = new ArrayList<>();
+        final TaskStudentPoints decryptTask = new TaskStudentPoints();
         for (NewJson json : jsons) {
-            final TaskStudentPoints points = Janus.parse(json, TaskStudentPoints.class);
+            final TaskStudentPoints points = Janus.parse(decryptTask.decrypt(json, owner), TaskStudentPoints.class);
             if (points != null) {
                 result.add(points);
             }

@@ -162,6 +162,7 @@ public class ExamResource {
             return;
         }
 
+        task.setOwner(getOwner(context));
         exam.addTask(task);
 
         if (!service.save(exam)) {

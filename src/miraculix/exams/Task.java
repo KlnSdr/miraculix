@@ -1,6 +1,7 @@
 package miraculix.exams;
 
 import dobby.util.json.NewJson;
+import hades.security.Encryptable;
 import thot.janus.DataClass;
 import thot.janus.annotations.JanusInteger;
 import thot.janus.annotations.JanusList;
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class Task implements DataClass {
+public class Task extends Encryptable implements DataClass {
     @JanusUUID("id")
     private UUID id;
     @JanusString("title")
@@ -23,6 +24,8 @@ public class Task implements DataClass {
     @JanusList("subtasks")
     private List<String> subtaskIds = new ArrayList<>();
     private List<Task> subtasks = new ArrayList<>();
+
+    private UUID owner;
 
     public Task() {
         this.id = UUID.randomUUID();
@@ -74,6 +77,10 @@ public class Task implements DataClass {
         return subtaskIds;
     }
 
+    public void setOwner(UUID owner) {
+        this.owner = owner;
+    }
+
     @Override
     public String getKey() {
         return id.toString();
@@ -91,14 +98,34 @@ public class Task implements DataClass {
         return json;
     }
 
-    public NewJson toStoreJson() {
+    @Override
+    public NewJson getEncrypted() {
+        setUuid(owner);
         final NewJson json = new NewJson();
 
-        json.setString("id", id.toString());
-        json.setString("title", title);
-        json.setInt("points", points);
-        json.setInt("points_comma", pointsComma);
-        json.setList("subtasks", subtaskIds.stream().map(o -> (Object) o).toList());
+        json.setString("id", encrypt(id));
+        json.setString("title", encrypt(title));
+        json.setString("points", encrypt(points));
+        json.setString("points_comma", encrypt(pointsComma));
+        json.setList("subtasks", subtaskIds.stream().map(o -> (Object) encrypt(o)).toList());
+
+        return json;
+    }
+
+    @Override
+    public NewJson decrypt(NewJson newJson, UUID uuid) {
+        if (newJson == null) {
+            return null;
+        }
+
+        setUuid(uuid);
+        final NewJson json = new NewJson();
+
+        json.setString("id", decryptString(newJson.getString("id")));
+        json.setString("title", decryptString(newJson.getString("title")));
+        json.setInt("points", decryptInt(newJson.getString("points")));
+        json.setInt("points_comma", decryptInt(newJson.getString("points_comma")));
+        json.setList("subtasks", newJson.getList("subtasks").stream().map(o -> (Object) decryptString((String) o)).toList());
 
         return json;
     }
