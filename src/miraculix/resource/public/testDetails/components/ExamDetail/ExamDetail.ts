@@ -14,10 +14,13 @@ class ExamDetail implements Component {
     // @ts-ignore
     return exam.tasks.reduce((acc: number, task: Task) => {
       if (task.subtasks.length > 0) {
-        // @ts-ignore
-        return task.subtasks.reduce((accc: number, subtask: Task) => {
-          return accc + subtask.points;
-        }, 0.0);
+        return (
+          acc +
+          // @ts-ignore
+          task.subtasks.reduce((accc: number, subtask: Task) => {
+            return accc + subtask.points;
+          }, 0.0)
+        );
       }
       return acc + task.points;
     }, 0.0);
