@@ -72,9 +72,9 @@ public class TaskStudentPoints extends Encryptable implements DataClass {
         setUuid(owner);
 
         final NewJson json = new NewJson();
-        json.setString("studentId", encrypt(studentId));
-        json.setString("taskId", encrypt(taskId));
-        json.setString("owner", encrypt(owner));
+        json.setString("studentId", studentId.toString());
+        json.setString("taskId", taskId.toString());
+        json.setString("owner", owner.toString());
         json.setString("points", encrypt(points));
         json.setString("pointsComma", encrypt(pointsComma));
         return json;
@@ -89,9 +89,9 @@ public class TaskStudentPoints extends Encryptable implements DataClass {
         setUuid(uuid);
 
         final NewJson json = new NewJson();
-        json.setString("studentId", decryptString(newJson.getString("studentId")));
-        json.setString("taskId", decryptString(newJson.getString("taskId")));
-        json.setString("owner", decryptString(newJson.getString("owner")));
+        json.setString("studentId", newJson.getString("studentId"));
+        json.setString("taskId", newJson.getString("taskId"));
+        json.setString("owner", newJson.getString("owner"));
         json.setInt("points", decryptInt(newJson.getString("points")));
         json.setInt("pointsComma", decryptInt(newJson.getString("pointsComma")));
         return json;

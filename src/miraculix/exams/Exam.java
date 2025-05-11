@@ -100,8 +100,8 @@ public class Exam extends Encryptable implements DataClass {
         setUuid(owner);
         final NewJson json = new NewJson();
 
-        json.setString("id", encrypt(id));
-        json.setString("owner", encrypt(owner));
+        json.setString("id", id.toString());
+        json.setString("owner", owner.toString());
         json.setString("title", encrypt(title));
         json.setString("clazz", encrypt(clazz));
         json.setList("tasks", taskIds.stream().map(o -> (Object) encrypt(o)).toList());
@@ -118,8 +118,8 @@ public class Exam extends Encryptable implements DataClass {
         setUuid(uuid);
         final NewJson json = new NewJson();
 
-        json.setString("id", decryptString(newJson.getString("id")));
-        json.setString("owner", decryptString(newJson.getString("owner")));
+        json.setString("id", newJson.getString("id"));
+        json.setString("owner", newJson.getString("owner"));
         json.setString("title", decryptString(newJson.getString("title")));
         json.setString("clazz", decryptString(newJson.getString("clazz")));
         json.setList("tasks", newJson.getList("tasks").stream().map(o -> (Object) decryptString((String) o)).toList());

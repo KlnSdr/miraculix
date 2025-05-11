@@ -103,7 +103,7 @@ public class Task extends Encryptable implements DataClass {
         setUuid(owner);
         final NewJson json = new NewJson();
 
-        json.setString("id", encrypt(id));
+        json.setString("id", id.toString());
         json.setString("title", encrypt(title));
         json.setString("points", encrypt(points));
         json.setString("points_comma", encrypt(pointsComma));
@@ -121,7 +121,7 @@ public class Task extends Encryptable implements DataClass {
         setUuid(uuid);
         final NewJson json = new NewJson();
 
-        json.setString("id", decryptString(newJson.getString("id")));
+        json.setString("id", newJson.getString("id"));
         json.setString("title", decryptString(newJson.getString("title")));
         json.setInt("points", decryptInt(newJson.getString("points")));
         json.setInt("points_comma", decryptInt(newJson.getString("points_comma")));

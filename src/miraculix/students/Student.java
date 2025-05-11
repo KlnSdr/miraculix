@@ -59,8 +59,8 @@ public class Student extends Encryptable implements DataClass {
     public NewJson getEncrypted() {
         setUuid(owner);
         final NewJson json = new NewJson();
-        json.setString("id", encrypt(id));
-        json.setString("owner", encrypt(owner));
+        json.setString("id", id.toString());
+        json.setString("owner", owner.toString());
         json.setString("name", encrypt(name));
         return json;
     }
@@ -73,8 +73,8 @@ public class Student extends Encryptable implements DataClass {
 
         setUuid(ownerUUID);
         final NewJson json = new NewJson();
-        json.setString("id", decryptString(newJson.getString("id")));
-        json.setString("owner", decryptString(newJson.getString("owner")));
+        json.setString("id", newJson.getString("id"));
+        json.setString("owner", newJson.getString("owner"));
         json.setString("name", decryptString(newJson.getString("name")));
         return json;
     }
