@@ -1,9 +1,9 @@
 {
   "application": {
     "name": "miraculix",
-    "version": "1.2-snapshot",
+    "version": "1.2",
     "dbHost": "thot-container",
-    "devMode": true
+    "devMode": false
   },
   "dobby": {
     "staticContent": {
@@ -16,7 +16,7 @@
     "port": 1711,
     "threads": 10,
     "mode": "http",
-    "logLevel": "DEBUG"
+    "logLevel": "WARN"
   },
   "hades": {
     "disableWelcomeMessage": true,

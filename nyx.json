@@ -3,13 +3,13 @@
   "project": {
     "entry": "miraculix.MiraculixApplication",
     "name": "miraculix",
-    "version": "1.2-snapshot",
+    "version": "1.2",
     "group": "dobby",
     "dependencies": [
       {
         "group": "dobby",
         "name": "hades",
-        "version": "2.3-snapshot"
+        "version": "2.3"
       }
     ]
   },
