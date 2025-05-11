@@ -37,7 +37,8 @@ class ExamDetail implements Component {
       tag: "div",
       id: "ExamDetail",
       classes: ["taskDetail"],
-      text: "lade Daten...",
+      text: "lade Daten",
+      children: [{ tag: "div", classes: ["loader"] }],
     };
   }
 

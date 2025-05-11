@@ -20,8 +20,8 @@ class AddTest implements Component {
       classes: ["AddTestPopupBody"],
       children: [
         {
-          tag: "p",
-          text: "lade Klassen...",
+          tag: "div",
+          classes: ["loader"],
         },
       ],
     };

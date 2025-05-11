@@ -15,34 +15,52 @@ class ClassesContainer implements Component {
       children: [
         {
           tag: "h1",
-          text: "Klassen"
+          text: "Klassen",
         },
         // @ts-ignore
-        new Button("", _ => AddClassPopup.show(), ["fa", "fa-plus"]).instructions(),
+        new Button("", (_) => AddClassPopup.show(), [
+          "fa",
+          "fa-plus",
+        ]).instructions(),
         {
           tag: "div",
           id: this.id,
-          classes: ["classesContainer"]
-        }
-      ]
+          classes: [],
+          children: [
+            {
+              tag: "label",
+              text: "lade Daten",
+            },
+            {
+              tag: "div",
+              classes: ["loader"],
+            },
+          ],
+        },
+      ],
     };
   }
 
   private loadClasses() {
     // @ts-ignore
     ClassService.getClasses()
-    // @ts-ignore
-    .then((cs: Class[]) => {
-      const container: edomElement = edom.findById(this.id)!;
+      // @ts-ignore
+      .then((cs: Class[]) => {
+        const container: edomElement = edom.findById(this.id)!;
+        container.applyStyle("classesContainer");
+        while (container.children.length > 0) {
+          container.children[0].delete();
+        }
 
-      edom.fromTemplate(
-        // @ts-ignore
-        cs.map((c: Class) => new ClassCard(c).instructions())
-      , container);
-    })
-    .catch((e: any) => {
-      alert(e);
-    });
+        edom.fromTemplate(
+          // @ts-ignore
+          cs.map((c: Class) => new ClassCard(c).instructions()),
+          container
+        );
+      })
+      .catch((e: any) => {
+        alert(e);
+      });
   }
 
   public unload() {}

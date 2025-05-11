@@ -25,7 +25,17 @@ class TestsContainer implements Component {
         {
           tag: "div",
           id: this.id,
-          classes: ["testsContainer"],
+          classes: [],
+          children: [
+            {
+              tag: "label",
+              text: "lade Daten",
+            },
+            {
+              tag: "div",
+              classes: ["loader"],
+            },
+          ],
         },
       ],
     };
@@ -41,16 +51,23 @@ class TestsContainer implements Component {
       // @ts-ignore
       .then(([ts, cs]: [Test[], Class[]]) => {
         const container: edomElement = edom.findById(this.id)!;
+        container.applyStyle("testsContainer");
+
+        while (container.children.length > 0) {
+          container.children[0].delete();
+        }
 
         edom.fromTemplate(
-          // @ts-ignore
-          cs.map((c: Class) =>
-          ts
-              // @ts-ignore
-              .filter((t: Test) => t.clazz == c.id)
-              // @ts-ignore
-              .map((t: Test) => new TestCard(t, c).instructions())
-          ).flat(),
+          cs
+            // @ts-ignore
+            .map((c: Class) =>
+              ts
+                // @ts-ignore
+                .filter((t: Test) => t.clazz == c.id)
+                // @ts-ignore
+                .map((t: Test) => new TestCard(t, c).instructions())
+            )
+            .flat(),
           container
         );
       })

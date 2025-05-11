@@ -31,8 +31,9 @@ class TaskStats implements Component {
       children: [
         {
           tag: "label",
-          text: "lade Daten...",
+          text: "lade Daten",
         },
+        { tag: "div", classes: ["loader"] },
       ],
     };
   }
